@@ -1,23 +1,51 @@
-import logo from './logo.svg';
 import './App.css';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from 'react-router-dom';
+import ManageProduct from './pages/ManageProduct';
+import ProductList from './pages/ProductListView';
+import ProductDetail from './pages/ProductDetail';
+import ProductUpdate from './pages/ProductUpdate';
+import Header from './components/Header';
+import SideBar from './components/Sidebar';
+
+const routes = [
+  {
+    path: ['/quan-ly-sp', '/'],
+    exact: true,
+    component: ManageProduct,
+  },
+  {
+    path: '/danh-sach-sp',
+    component: ProductList,
+  },
+  {
+    path: '/chi-tiet-sp',
+    component: ProductDetail,
+  },
+  {
+    path: '/cap-nhat-san-pham',
+    component: ProductUpdate,
+  },
+];
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <Router>
+        <SideBar />
+        <Switch>
+          {routes.map((route) => (
+            <Route
+              key={route.path}
+              {...route}
+            />
+          ))}
+        </Switch>
+      </Router>
     </div>
   );
 }
