@@ -8,8 +8,10 @@ import ManageProduct from './pages/ManageProduct';
 import ProductList from './pages/ProductListView';
 import ProductDetail from './pages/ProductDetail';
 import ProductUpdate from './pages/ProductUpdate';
+import ExamplePage from './pages/Example';
 import Header from './components/Header';
 import SideBar from './components/Sidebar';
+import OverLayProvider from './components/OverLay/provider';
 
 const routes = [
   {
@@ -29,11 +31,15 @@ const routes = [
     path: '/cap-nhat-san-pham',
     component: ProductUpdate,
   },
+  {
+    path: '/example',
+    component: ExamplePage,
+  },
 ];
 
 function App() {
   return (
-    <div className="App">
+    <OverLayProvider>
       <Header />
       <Router>
         <SideBar />
@@ -46,7 +52,7 @@ function App() {
           ))}
         </Switch>
       </Router>
-    </div>
+    </OverLayProvider>
   );
 }
 
