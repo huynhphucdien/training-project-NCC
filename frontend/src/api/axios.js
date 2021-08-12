@@ -6,24 +6,24 @@ const headers = {
   'Content-Type': 'application/json',
 };
 const token = localStorage.getItem('jwt_token');
-if (token) {
-  headers['Authorization'] = `Bearer ${token}`;
-}
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
   headers,
 });
 
+if (token) {
+  axiosInstance.defaults.headers.common.Authorization = `Bearer ${token}`;
+}
+
 axiosInstance.interceptors.response.use(
-  response => {
+  (response) => {
     if (response.data) {
       return response.data;
     }
     return response;
   },
-  error => {
-    console.log('error', error);
+  (error) => {
     throw error;
   },
 );
