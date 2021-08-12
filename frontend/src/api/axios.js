@@ -1,20 +1,23 @@
+/* eslint-disable dot-notation */
+/* eslint-disable no-param-reassign */
 import axios from 'axios';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const headers = {
-  'Content-Type': 'application/json',
-};
-const token = localStorage.getItem('jwt_token');
-
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
-  headers,
 });
 
-if (token) {
-  axiosInstance.defaults.headers.common.Authorization = `Bearer ${token}`;
-}
+axiosInstance.interceptors.request.use(async (config) => {
+  const token = localStorage.getItem('jwt_token');
+  config.headers = {
+    'Content-Type': 'application/json',
+  };
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`;
+  }
+  return config;
+});
 
 axiosInstance.interceptors.response.use(
   (response) => {
@@ -24,6 +27,19 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
+    const statusCode = error.response.status;
+    if (statusCode === 404) {
+      window.location.href = '/not-found';
+      return;
+    }
+    if (statusCode === 401) {
+      window.location.href = '/login';
+      return;
+    }
+    if (statusCode === 403) {
+      window.location.href = '/forbidden';
+      return;
+    }
     throw error;
   },
 );
