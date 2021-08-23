@@ -4,7 +4,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import axiosInstance from '../../api/axios';
 import { List, ListItem, Container } from './styles';
 // import { OverLayContext } from '../../components/OverLay/provider';
-import { useLoading } from '../../hooks/useLoading';
+import useLoading from '../../hooks/useLoading';
 
 export default function ExamplePage() {
   const [posts, setPosts] = useState([]);
