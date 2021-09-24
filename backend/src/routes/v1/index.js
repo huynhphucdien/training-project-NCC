@@ -29,10 +29,8 @@ defaultRoutes.forEach((route) => {
   router.use(route.path, route.route);
 });
 
-console.log('phai vao day');
 /* istanbul ignore next */
 if (config.env === 'development') {
-  console.log('phai vao day');
   devRoutes.forEach((route) => {
     router.use(route.path, route.route);
   });
