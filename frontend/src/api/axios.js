@@ -1,6 +1,7 @@
 /* eslint-disable dot-notation */
 /* eslint-disable no-param-reassign */
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -38,6 +39,12 @@ axiosInstance.interceptors.response.use(
     }
     if (statusCode === 403) {
       window.location.href = '/forbidden';
+      return;
+    }
+    if (statusCode === 500) {
+      // show notification
+      toast.error('System has an error');
+      console.log('error', error);
       return;
     }
     throw error;

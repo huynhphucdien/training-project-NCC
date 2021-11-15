@@ -4,6 +4,7 @@ import {
   Switch,
   Route,
 } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import ManageProduct from './pages/ManageProduct';
 import ProductList from './pages/ProductListView';
 import ProductDetail from './pages/ProductDetail';
@@ -52,6 +53,7 @@ function App() {
           ))}
         </Switch>
       </Router>
+      <ToastContainer />
     </OverLayProvider>
   );
 }
