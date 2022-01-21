@@ -1,9 +1,12 @@
+/* eslint-disable no-console */
 /* eslint-disable dot-notation */
 /* eslint-disable no-param-reassign */
+// const dotenv = require('dotenv');
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
+// const BASE_URL = 'http://localhost:5000';
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -29,7 +32,7 @@ axiosInstance.interceptors.response.use(
   },
   (error) => {
     const statusCode = error.response.status;
-    if (statusCode === 404) {
+    if (statusCode === 304) {
       window.location.href = '/not-found';
       return;
     }

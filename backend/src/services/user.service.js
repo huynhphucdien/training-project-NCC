@@ -14,7 +14,10 @@ const createUser = async (userBody) => {
   const user = await User.create(userBody);
   return user;
 };
-
+const queryUsers = async (filter, options) => {
+  const users = await User.paginate(filter, options);
+  return users;
+};
 /**
  * Get user by id
  * @param {ObjectId} id
@@ -72,4 +75,5 @@ module.exports = {
   getUserByEmail,
   updateUserById,
   deleteUserById,
+  queryUsers,
 };

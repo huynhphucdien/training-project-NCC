@@ -1,11 +1,7 @@
 import React from 'react';
 
-function AddProductForm() {
-  return (
-    <div>
-      AddProductForm
-    </div>
-  );
+function ProductForm() {
+  return <div>something</div>;
 }
 
-export default AddProductForm;
+export default ProductForm;
