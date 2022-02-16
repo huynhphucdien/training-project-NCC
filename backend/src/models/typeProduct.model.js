@@ -6,7 +6,7 @@ const typeProductModel = mongoose.Schema(
     label: {
       type: String,
       required: true,
-      // trim: true,
+      trim: true,
     },
   },
   {
@@ -17,6 +17,6 @@ const typeProductModel = mongoose.Schema(
 // add plugin that converts mongoose to json
 typeProductModel.plugin(toJSON);
 
-const TypeProduct = mongoose.model('Producttype', typeProductModel);
+const TypeProduct = mongoose.model('ProductType', typeProductModel);
 
 module.exports = TypeProduct;

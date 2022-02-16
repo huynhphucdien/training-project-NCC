@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import axiosInstance from './axios';
 
 const productApi = {
@@ -11,7 +12,7 @@ const productApi = {
     return axiosInstance.get(url);
   },
 
-  add(data) {
+  create(data) {
     const url = '/product';
     return axiosInstance.post(url, data);
   },

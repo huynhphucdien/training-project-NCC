@@ -49,7 +49,8 @@ passport.use('jwt', jwtStrategy);
 if (config.env === 'production') {
   app.use('/v1/auth', authLimiter);
 }
-
+// Set uploads folder to available
+app.use('/uploads', express.static('uploads'));
 // v1 api routes
 app.use('/', routes);
 

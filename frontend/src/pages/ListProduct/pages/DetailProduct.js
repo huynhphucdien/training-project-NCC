@@ -5,11 +5,10 @@
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 /* eslint-disable space-in-parens */
-import { Grid, Paper } from '@mui/material';
-import Box from '@mui/material/Box';
+import { Grid, Paper, Stack } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
-import { useRouteMatch } from 'react-router-dom';
+import { Link, useRouteMatch } from 'react-router-dom';
 import productApi from '../../../api/productApi';
 import useLoading from '../../../hooks/useLoading';
 import DetailProductImage from '../components/DetailProductImage';
@@ -18,13 +17,15 @@ import DetailProductInfo from '../components/DetailProductInfo';
 const useStyles = makeStyles((theme) => ({
   main: {
     display: 'flex',
-    flexFlow: 'row nowrap',
+    flexFlow: 'column nowrap',
+    justifyContent: 'space-between',
   },
   left: {
     width: '45%',
   },
   right: {
     flex: '1 1 0',
+    marginLeft: '8px !important',
   },
   paper: {
     height: '100%',
@@ -38,8 +39,8 @@ export default function DetailProduct() {
 
   const {
     params: { detailId },
+    path,
   } = useRouteMatch();
-
   const getData = async () => {
     try {
       // setLoading(true);
@@ -49,7 +50,7 @@ export default function DetailProduct() {
         setProductDetail(data);
       }
       // setLoading(false);
-      // hideLoading();
+      hideLoading();
     } catch (e) {
       console.log(e);
       // setLoading(false);
@@ -61,10 +62,13 @@ export default function DetailProduct() {
   }, []);
 
   return (
-    <Box className={classes.root}>
+    <Stack className={classes.main}>
+      <Link to="/danh-sach-san-pham">Sản Phẩm/ Danh sách sản phẩm</Link>
       <Grid container spacing={1}>
         <Grid item className={classes.left}>
-          <DetailProductImage data={ProductDetail} />
+          <Paper className={classes.paper}>
+            <DetailProductImage data={ProductDetail} />
+          </Paper>
         </Grid>
         <Grid item className={classes.right}>
           <Paper elevation={0} className={classes.paper}>
@@ -72,6 +76,6 @@ export default function DetailProduct() {
           </Paper>
         </Grid>
       </Grid>
-    </Box>
+    </Stack>
   );
 }

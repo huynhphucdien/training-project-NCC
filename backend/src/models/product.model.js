@@ -3,48 +3,47 @@ const { toJSON } = require('./plugins');
 
 const productModel = mongoose.Schema(
   {
-    name: {
+    productCode: {
+      type: String,
+    },
+    productName: {
       type: String,
       required: true,
       trim: true,
     },
-    typeId: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: 'TypeProduct',
+    productType: {
+      type: String,
       required: true,
     },
-    selectedId: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: 'CategoryProduct',
+    productCategory: {
+      type: String,
       required: true,
     },
-    cost: {
+    productCost: {
       type: Number,
       required: true,
+      trim: true,
     },
-    description: {
+    productDescription: {
       type: String,
-      default: '',
+      trim: true,
     },
-    image: {
-      type: String,
+    mainImage: {
+      type: Array,
+      required: true,
     },
-    // mainImgUrl: {
-    //     type: String,
-    //     default: 'No Img Url'
-    // },
-    //     image: {
-    //       type: Array,
-    //       required: true,
-    //     },
-    //     slideImages: {
-    //       type: Array,
-    //       default: [null, null, null, null],
-    //     },
-    //     productCode: {
-    //       type: String,
-    //       default: 'No Code'
-    //     },
+    image1: {
+      type: Array,
+    },
+    image2: {
+      type: Array,
+    },
+    image3: {
+      type: Array,
+    },
+    image4: {
+      type: Array,
+    },
   },
   {
     timestamps: true,

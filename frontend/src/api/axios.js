@@ -16,6 +16,7 @@ axiosInstance.interceptors.request.use(async (config) => {
   const token = localStorage.getItem('jwt_token');
   config.headers = {
     'Content-Type': 'application/json',
+    // 'Content-Type': 'multipart/form-data',
   };
   if (token) {
     config.headers['Authorization'] = `Bearer ${token}`;
@@ -25,13 +26,16 @@ axiosInstance.interceptors.request.use(async (config) => {
 
 axiosInstance.interceptors.response.use(
   (response) => {
+    // toast.success('Successfully');
     if (response.data) {
+      // console.log('success');
       return response.data;
     }
     return response;
   },
   (error) => {
     const statusCode = error.response.status;
+
     if (statusCode === 304) {
       window.location.href = '/not-found';
       return;
@@ -45,12 +49,12 @@ axiosInstance.interceptors.response.use(
       return;
     }
     if (statusCode === 500) {
-      // show notification
-      toast.error('System has an error');
       console.log('error', error);
+      // show notification
+
       return;
     }
-    throw error;
+    toast.error('System has an error');
   },
 );
 

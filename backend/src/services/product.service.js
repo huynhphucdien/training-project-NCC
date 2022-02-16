@@ -16,9 +16,22 @@ const createProduct = async (productBody) => {
  * @param {*} id
  * @returns
  */
-const getAllProductService = async () => {
-  const product = await ProductModel.find();
-  return product;
+const getAllProductService = async (query) => {
+  const page = query.page || 1;
+  const limit = query.limit || 12;
+  const total = await ProductModel.countDocuments({});
+
+  const product = await ProductModel.find()
+    .sort({ createdAt: 'descending' })
+    .skip(limit * (page - 1)) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
+    .limit(limit);
+  const products = { page, limit, total, product };
+  console.log('product', product);
+  console.log('total', total);
+  console.log('page', page);
+  console.log('limit', limit);
+  console.log('query', query);
+  return products;
 };
 
 /**
@@ -32,12 +45,12 @@ const getProductById = async (id) => {
 
 /**
  * Update product by id
- * @param {ObjectId} productId
+ * @param {ObjectId} detailId
  * @param {Object} updateBody
  * @returns {Promise<Product>}
  */
-const updateProductById = async (productId, updateBody) => {
-  const product = await getProductById(productId);
+const updateProductById = async (detailId, updateBody) => {
+  const product = await getProductById(detailId);
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, 'product not found');
   }
@@ -48,11 +61,11 @@ const updateProductById = async (productId, updateBody) => {
 
 /**
  * Delete product by id
- * @param {ObjectId} productId
+ * @param {ObjectId} detailId
  * @returns {Promise<Product>}
  */
-const deleteProductById = async (productId) => {
-  const product = await getProductById(productId);
+const deleteProductById = async (detailId) => {
+  const product = await getProductById(detailId);
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, 'product not found');
   }

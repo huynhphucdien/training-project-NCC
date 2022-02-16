@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable react/jsx-closing-tag-location */
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable import/extensions */
@@ -10,9 +11,9 @@ import Box from '@mui/material/Box';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import productApi from '../../../api/productApi';
+import useLoading from '../../../hooks/useLoading';
 import FilterProduct from '../components/Filter/FilterProduct';
 import ProductList from '../components/ProductList';
-import ProductSkeleton from '../components/ProductSkeleton';
 
 const useStyles = makeStyles((theme) => ({
   pagination: {
@@ -23,41 +24,69 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: '20px',
     width: '100%',
   },
+  filterProduct: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    margin: '0 16px',
+  },
 }));
 export default function ListProduct() {
   const classes = useStyles();
+  const [showLoading, hideLoading] = useLoading();
   const [productList, setProductList] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const length = 8;
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 12,
+    total: 12,
+  });
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const data = await productApi.getAll();
-        setProductList(data);
-      } catch (error) {
-        console.log(error);
+  const [filter, setFilter] = useState({ page: 1, limit: 12 });
+
+  const getApi = async () => {
+    try {
+      // setLoading(true);
+      showLoading();
+      const { product, total, limit, page } = await productApi.getAll(filter);
+      if (product) {
+        setProductList(product);
+        setPagination({ total, limit, page });
       }
-      setLoading(false);
-    })();
-  }, []);
+      // setLoading(false);
+      hideLoading();
+    } catch (e) {
+      // setLoading(false);
+      showLoading();
+    }
+  };
+  useEffect(() => {
+    getApi();
+  }, [filter]);
+
+  const handlePageChange = (e, page) => {
+    setFilter((prev) => ({
+      ...prev,
+      page,
+    }));
+  };
 
   return (
-    <Box className={classes.root}>
+    <Box>
       <Grid container spacing={1}>
-        <Paper elevation={0}>
-          <Box>
+        <Paper elevation={0} sx={{ pt: 2 }}>
+          <Box className={classes.filterProduct}>
             <FilterProduct />
           </Box>
-          {loading ? (
-            <ProductSkeleton length={length} />
-          ) : (
-            <ProductList data={productList} />
-          )}
+          <ProductList data={productList} />
+          <Box className={classes.pagination}>
+            <Pagination
+              color="primary"
+              count={Math.ceil(pagination.total / pagination.limit)}
+              page={pagination.page}
+              shape="rounded"
+              onChange={handlePageChange}
+            ></Pagination>
+          </Box>
         </Paper>
-        <Box className={classes.pagination}>
-          <Pagination color="primary" count={8} shape="rounded"></Pagination>
-        </Box>
       </Grid>
     </Box>
   );

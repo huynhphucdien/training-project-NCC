@@ -1,15 +1,17 @@
 const express = require('express');
 const validate = require('../../middlewares/validate');
-const productValidation = require('../../validations/product.validation');
-const productController = require('../../controllers/product.controller');
+const productCategoryValidation = require('../../validations/categoryProduct.validation');
+const productCategoryController = require('../../controllers/categoryProduct.controller');
 
 const router = express.Router();
 
-router.route('/').post(validate(productValidation.createProduct), productController.createProduct);
+// router
+//   .route('/')
+//   .post(validate(productCategoryValidation.createCategoryProduct), productCategoryController.createCategoryProduct);
 
-router.route('/').get(validate(productValidation.getAllProduct), productController.getAllProduct);
-router.route('/:categoryId').get(productController.getProduct);
-// router.route('/').patch(validate(productValidation.updateUser), productController.updateProduct);
-// router.route('/').delete(validate(productValidation.deleteProduct), productController.deleteProduct);
+router.route('/').get(productCategoryController.getAllCategoryProduct);
+router.route('/:categoryId').get(productCategoryController.getOneCategoryProduct);
+// router.route('/').patch(validate(productCategoryValidation.updateUser), productCategoryController.updateProduct);
+// router.route('/').delete(validate(productCategoryValidation.deleteProduct), productCategoryController.deleteProduct);
 
 module.exports = router;

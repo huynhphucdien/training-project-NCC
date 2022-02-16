@@ -2,30 +2,22 @@
 import { Box } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { Slide, ToastContainer } from 'react-toastify';
 import './App.css';
 import Header from './components/Header';
 // import SideBar from './components/Sidebar';
 import OverLayProvider from './components/OverLay/provider';
 import SideBar from './components/Sidebar';
-import ExamplePage from './pages/Example';
-import ListProduct from './pages/ListProduct/pages/ListProduct';
 import ProductDetail from './pages/ListProduct/pages/DetailProduct';
-// import ManageProduct from './pages/ManageProduct';
-// import ManageProduct from './pages/ManageProduct';
-import ProductUpdate from './pages/ProductUpdate';
-import ManageProduct from './pages/ManageProduct/pages/ManageProduct';
-import ManageDetailProduct from './pages/ManageProduct/pages/ManageDetailProduct';
+import ListProduct from './pages/ListProduct/pages/ListProduct';
+import ContainManageProduct from './pages/ManageProduct';
+// import ManageProduct from './pages/ManageProduct/pages/ManageProduct';
 
 const routes = [
   {
-    path: ['/quan-ly-san-pham'],
-    exact: true,
-    component: ManageProduct,
-  },
-  {
-    path: ['/quan-ly-san-pham/:id'],
-    component: ManageDetailProduct,
+    path: '/quan-ly-san-pham',
+    // exact: true,
+    component: ContainManageProduct,
   },
   {
     path: ['/danh-sach-san-pham', '/'],
@@ -36,16 +28,6 @@ const routes = [
     path: '/danh-sach-san-pham/:detailId',
     exact: true,
     component: ProductDetail,
-  },
-  {
-    path: '/cap-nhat-san-pham',
-    exact: true,
-    component: ProductUpdate,
-  },
-  {
-    path: '/example',
-    exact: true,
-    component: ExamplePage,
   },
 ];
 // eslint-disable-next-line no-unused-vars
@@ -67,24 +49,26 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const classes = useStyles();
   return (
-    <OverLayProvider>
+    <>
       <Header />
-      <Router>
-        <Box className={classes.main} pt={2}>
-          <Box className={classes.left}>
-            <SideBar />
+      <OverLayProvider>
+        <Router>
+          <Box className={classes.main} pt={2}>
+            <Box className={classes.left}>
+              <SideBar />
+            </Box>
+            <Box className={classes.right}>
+              <Switch>
+                {routes.map((route) => (
+                  <Route key={route.path} {...route} />
+                ))}
+              </Switch>
+            </Box>
           </Box>
-          <Box className={classes.right}>
-            <Switch>
-              {routes.map((route) => (
-                <Route key={route.path} {...route} />
-              ))}
-            </Switch>
-          </Box>
-        </Box>
-      </Router>
-      <ToastContainer />
-    </OverLayProvider>
+        </Router>
+        <ToastContainer transition={Slide} limit={3} autoClose={1500} position="top-center" />
+      </OverLayProvider>
+    </>
   );
 }
 

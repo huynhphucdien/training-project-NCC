@@ -1,2 +1,2 @@
 /* eslint-disable import/export */
-export * from './common';
+export * from './formatNumber';

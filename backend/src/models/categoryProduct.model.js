@@ -6,11 +6,10 @@ const categoryProductModel = mongoose.Schema(
     label: {
       type: String,
       required: true,
-      // trim: true,
+      trim: true,
     },
     typeId: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: 'CategoryProduct',
       required: true,
     },
   },
@@ -22,6 +21,6 @@ const categoryProductModel = mongoose.Schema(
 // add plugin that converts mongoose to json
 categoryProductModel.plugin(toJSON);
 
-const CategoryProduct = mongoose.model('ProductChoosen', categoryProductModel);
+const CategoryProduct = mongoose.model('ProductCategory', categoryProductModel);
 
 module.exports = CategoryProduct;

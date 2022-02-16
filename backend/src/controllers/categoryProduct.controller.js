@@ -25,7 +25,10 @@ const getOneCategoryProduct = catchAsync(async (req, res) => {
 });
 
 const updateCategoryProduct = catchAsync(async (req, res) => {
-  const type = await productCategoryService.updateProductById(req.params.typeId, req.body);
+  const type = await productCategoryService.updateProductById(
+    req.params.typeId,
+    req.body
+  );
   res.send(type);
 });
 
