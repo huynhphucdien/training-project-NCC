@@ -11,12 +11,12 @@ import Product from './Product';
 const useStyles = makeStyles({
   ProductList: {
     '&:hover': {
-      boxShadow:
-        ' 0 4px 15px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%)',
+      cursor: 'pointer',
+      boxShadow: ' 0 4px 15px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%)',
       transition: '0.2s',
     },
     borderRadius: '4px',
-    height: '300px',
+    minHeight: '300px',
     objectFit: 'cover',
     overflow: 'hidden',
   },
@@ -27,15 +27,7 @@ export default function ProductList({ data }) {
   return (
     <Grid container>
       {data.map((product, index) => (
-        <Grid
-          item
-          key={index}
-          xs={12}
-          sm={6}
-          md={4}
-          lg={3}
-          className={classes.ProductList}
-        >
+        <Grid item key={index} xs={12} sm={6} md={4} lg={3} className={classes.ProductList}>
           <Product product={product} />
         </Grid>
       ))}

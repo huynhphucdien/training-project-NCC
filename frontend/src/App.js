@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     margin: '8px auto',
   },
   right: {
-    flex: '1 1 0',
+    flex: '1',
     margin: '0 16px',
   },
 }));

@@ -6,7 +6,7 @@ import { Box, Button, Input, Paper, Stack } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { IMAGE_PLACEHOLDER } from '../../../../../constants';
+import { IMAGE_PLACEHOLDER, URL_IMAGE } from '../../../../../components/Constants';
 
 const useStyles = makeStyles({
   img: {
@@ -56,8 +56,7 @@ export default function UploadImage1({ image2, imageAdded2 }) {
   // Set avarta at first render
   useEffect(() => {
     if (imageAdded2.image2.length > 0) {
-      setAvarta2(imageAdded2.image2);
-      console.log('imageAdded2.image2', imageAdded2.image2);
+      setAvarta2(`${URL_IMAGE}${imageAdded2.image2}`);
     }
   }, []);
 

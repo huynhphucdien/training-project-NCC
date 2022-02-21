@@ -6,8 +6,7 @@ import { Box, Button, Input, Paper, Stack } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { IMAGE_PLACEHOLDER } from '../../../../../constants';
-// import { IMAGE_PLACEHOLDER } from '../../../../../constants';
+import { IMAGE_PLACEHOLDER, URL_IMAGE } from '../../../../../components/Constants';
 
 const useStyles = makeStyles({
   stack: {
@@ -57,7 +56,7 @@ export default function ImageAdded({ imageAdded, imageChange }) {
 
   useEffect(() => {
     if (imageAdded.mainImage.length > 0) {
-      setAvarta(imageAdded.mainImage);
+      setAvarta(`${URL_IMAGE}${imageAdded.mainImage}`);
     }
   }, []);
   const handleChange = (e) => {

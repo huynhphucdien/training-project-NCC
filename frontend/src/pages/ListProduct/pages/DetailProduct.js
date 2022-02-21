@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable react/jsx-closing-tag-location */
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable import/extensions */
@@ -5,14 +6,14 @@
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 /* eslint-disable space-in-parens */
-import { Grid, Paper, Stack } from '@mui/material';
+import { Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
 import productApi from '../../../api/productApi';
 import useLoading from '../../../hooks/useLoading';
-import DetailProductImage from '../components/DetailProductImage';
-import DetailProductInfo from '../components/DetailProductInfo';
+import DetailProductInfo from '../components/DetailProduct/DetailProductInfo';
+import DetailProductImage from '../components/DetailProduct/DetailProductImage';
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -21,11 +22,12 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
   },
   left: {
-    width: '45%',
+    width: '50%',
   },
   right: {
-    flex: '1 1 0',
+    flex: '1',
     marginLeft: '8px !important',
+    height: '500px',
   },
   paper: {
     height: '100%',
@@ -39,7 +41,6 @@ export default function DetailProduct() {
 
   const {
     params: { detailId },
-    path,
   } = useRouteMatch();
   const getData = async () => {
     try {
@@ -63,7 +64,14 @@ export default function DetailProduct() {
 
   return (
     <Stack className={classes.main}>
-      <Link to="/danh-sach-san-pham">Sản Phẩm/ Danh sách sản phẩm</Link>
+      <Box>
+        <Typography>
+          Sản Phẩm/
+          <Box component="span" ml={1}>
+            <Link to="/danh-sach-san-pham">Danh sách sản phẩm</Link>
+          </Box>
+        </Typography>
+      </Box>
       <Grid container spacing={1}>
         <Grid item className={classes.left}>
           <Paper className={classes.paper}>

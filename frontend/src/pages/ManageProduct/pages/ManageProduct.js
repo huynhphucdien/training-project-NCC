@@ -1,3 +1,4 @@
+/* eslint-disable radix */
 /* eslint-disable no-undef */
 /* eslint-disable prefer-const */
 /* eslint-disable no-restricted-syntax */
@@ -8,8 +9,11 @@
 import { makeStyles } from '@material-ui/core/styles';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import { Box, Button, Dialog, DialogContent, IconButton, Paper } from '@mui/material';
+import queryString from 'query-string';
 // import { makeStyles } from '@mui/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import productApi from '../../../api/productApi';
 import useLoading from '../../../hooks/useLoading';
 import AddProductForm from '../components/AddProductForm/ManageForms/AddProductForm';
@@ -36,25 +40,44 @@ const useStyles = makeStyles({
 
 export default function ManageForm(props) {
   const classes = useStyles();
-
+  const { categoryProduct, typeProduct } = props;
+  // UseStates
+  const [showLoading, hideLoading] = useLoading();
   const [open, setOpen] = useState(false);
   const [productData, setProductData] = useState([]);
+  // Queries
+  const history = useHistory();
+  const location = useLocation();
+  const queryParams = useMemo(() => {
+    const queries = queryString.parse(location.search);
+    return {
+      ...queries,
+      limit: Number.parseInt(queries.limit) || 6,
+      page: Number.parseInt(queries.page) || 1,
+    };
+  }, [location]);
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 6,
     total: 6,
   });
-  const [filter, setFilter] = useState({ page: 1, limit: 6 });
-  const [showLoading, hideLoading] = useLoading();
-
-  const { categoryProduct, typeProduct } = props;
 
   // Call Api
   const getProductApi = async () => {
     try {
       // setLoading(true);
       showLoading();
-      const { product, total, limit, page } = await productApi.getAll(filter);
+      const { product, total, limit, page } = await productApi.getAll(queryParams);
+      if (product.length === 0) {
+        const filters = {
+          ...queryParams,
+          page: queryParams.page - 1,
+        };
+        history.push({
+          pathname: history.location.pathname,
+          search: queryString.stringify(filters),
+        });
+      }
       if (product) {
         setProductData(product);
         setPagination({ total, limit, page });
@@ -62,40 +85,54 @@ export default function ManageForm(props) {
       // setLoading(false);
       hideLoading();
     } catch (e) {
+      console.log('fail', e);
       // setLoading(false);
-      showLoading();
     }
+    hideLoading();
   };
 
   useEffect(() => {
     getProductApi();
-  }, [filter]);
+  }, [queryParams]);
 
   // Handle change page
   const handlePageChange = (e, page) => {
-    setFilter((prev) => ({
-      ...prev,
+    const filters = {
+      ...queryParams,
       page,
-    }));
+    };
+    history.push({
+      pathname: history.location.pathname,
+      search: queryString.stringify(filters),
+    });
   };
 
   // Handle Submit form
   const handleSubmit = async (values, fileChange) => {
+    const newType = typeProduct.find((item) => item.id === values.productType);
+    const newCategory = categoryProduct.find((item) => item.id === values.productCategory);
     // Post form to backend
     let formValues = new FormData();
     formValues.append('productName', values.productName);
-    formValues.append('productType', values.productType);
-    formValues.append('productCategory', values.productCategory);
+    formValues.append('productType[id]', newType.id);
+    formValues.append('productType[label]', newType.label);
+    formValues.append('productCategory[id]', newCategory.id);
+    formValues.append('productCategory[label]', newCategory.label);
+    // formValues.append('productCategory', values.productCategory);
     formValues.append('productCost', values.productCost);
     formValues.append('productDescription', values.productDescription);
     formValues.append('mainImage', fileChange);
-    if (values && fileChange?.name) {
-      await productApi.create(formValues);
-    } else {
+    if (!values && !fileChange?.name) {
       return;
     }
-    await getProductApi();
     setOpen(false);
+    showLoading();
+    const addProduct = await productApi.create(formValues);
+    hideLoading();
+    if (addProduct) {
+      toast.success('SUCESSFULLY');
+    }
+    await getProductApi();
   };
   // Handle open and close form
   const handleClose = () => {
@@ -110,6 +147,7 @@ export default function ManageForm(props) {
     await productApi.remove(id);
     getProductApi();
   };
+
   return (
     <Box>
       <Paper sx={{ pt: 2 }}>
@@ -131,6 +169,8 @@ export default function ManageForm(props) {
         </Dialog>
         <ProductTable
           productData={productData}
+          typeProduct={typeProduct}
+          categoryProduct={categoryProduct}
           count={Math.ceil(pagination.total / pagination.limit)}
           page={pagination.page}
           limit={pagination.limit}

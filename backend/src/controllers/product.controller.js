@@ -5,8 +5,8 @@ const { productService } = require('../services');
 const uniqid = require('uniqid');
 
 const createProduct = catchAsync(async (req, res) => {
-  const productType = req.body.productType;
-  const productCategory = req.body.productCategory;
+  const productType = req.body.productType.label;
+  const productCategory = req.body.productCategory.label;
   // Create productCode
   let uniqCode = uniqid
     .process(
@@ -21,8 +21,7 @@ const createProduct = catchAsync(async (req, res) => {
   // xóa các ký tự dấu tổ hợp
   uniqCode = uniqCode.replace(/[\u0300-\u036f]/g, '');
 
-  const imageName =
-    req.protocol + '://' + req.get('host') + '/uploads/' + req.file.filename;
+  const imageName = req.file.filename;
   const productBody = {
     ...req.body,
     mainImage: imageName,
@@ -56,47 +55,27 @@ const getProduct = catchAsync(async (req, res) => {
 const updateProduct = catchAsync(async (req, res) => {
   const mainImage =
     req.files && req.files['mainImage']
-      ? req.protocol +
-        '://' +
-        req.get('host') +
-        '/uploads/' +
-        req.files['mainImage'][0].filename
+      ? req.files['mainImage'][0].filename
       : req.body.mainImage;
 
   const image1 =
     req.files && req.files['image1']
-      ? req.protocol +
-        '://' +
-        req.get('host') +
-        '/uploads/' +
-        req.files['image1'][0].filename
+      ? req.files['image1'][0].filename
       : req.body.image1;
 
   const image2 =
     req.files && req.files['image2']
-      ? req.protocol +
-        '://' +
-        req.get('host') +
-        '/uploads/' +
-        req.files['image2'][0].filename
+      ? req.files['image2'][0].filename
       : req.body.image2;
 
   const image3 =
     req.files && req.files['image3']
-      ? req.protocol +
-        '://' +
-        req.get('host') +
-        '/uploads/' +
-        req.files['image3'][0].filename
+      ? req.files['image3'][0].filename
       : req.body.image3;
 
   const image4 =
     req.files && req.files['image4']
-      ? req.protocol +
-        '://' +
-        req.get('host') +
-        '/uploads/' +
-        req.files['image4'][0].filename
+      ? req.files['image4'][0].filename
       : req.body.image4;
 
   const updateBody = {

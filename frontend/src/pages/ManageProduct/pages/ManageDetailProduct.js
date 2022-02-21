@@ -8,11 +8,12 @@ import { Box, Dialog, DialogContent, IconButton, Paper } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import UpdateForm from '../components/EditProductForm/UpdateForm';
+import { toast } from 'react-toastify';
 // import categoryProductApi from '../../../api/categoryProduct';
 import productApi from '../../../api/productApi';
 // import typeProductApi from '../../../api/typeProduct';
 import useLoading from '../../../hooks/useLoading';
+import UpdateForm from '../components/EditProductForm/UpdateForm';
 
 const useStyles = makeStyles({
   closeButton: {
@@ -48,6 +49,7 @@ export default function ManageDetailProduct(props) {
       // setLoading(true);
       showLoading();
       const data = await productApi.get(id);
+      console.log('data', data);
       if (data) {
         setEditProduct(data);
         setOpen(true);
@@ -67,13 +69,17 @@ export default function ManageDetailProduct(props) {
   // Update product
   const handleSubmit = async (values, images) => {
     const { mainImage, image1, image2, image3, image4 } = images;
+    const newType = typeProduct.find((item) => item.id === values.productType);
+    const newCategory = categoryProduct.find((item) => item.id === values.productCategory);
     // console.log('image1', image1);
     // console.log('editProduct');
 
     let formValues = new FormData();
     formValues.append('productName', values.productName);
-    formValues.append('productType', values.productType);
-    formValues.append('productCategory', values.productCategory);
+    formValues.append('productType[id]', newType.id);
+    formValues.append('productType[label]', newType.label);
+    formValues.append('productCategory[id]', newCategory.id);
+    formValues.append('productCategory[label]', newCategory.label);
     formValues.append('productCost', values.productCost);
     formValues.append('productDescription', values.productDescription);
     // MainImage
@@ -118,7 +124,12 @@ export default function ManageDetailProduct(props) {
     // Update data to database
     const idEdited = editProduct.id;
     setOpen(false);
-    await productApi.update(idEdited, formValues);
+    showLoading();
+    const update = await productApi.update(idEdited, formValues);
+    hideLoading();
+    if (update) {
+      toast.success('Successfully');
+    }
     history.push('/quan-ly-san-pham');
   };
   const handleClose = () => {

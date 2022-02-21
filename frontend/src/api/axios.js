@@ -27,9 +27,12 @@ axiosInstance.interceptors.request.use(async (config) => {
 axiosInstance.interceptors.response.use(
   (response) => {
     // toast.success('Successfully');
+    const statusCode = response.status;
     if (response.data) {
-      // console.log('success');
       return response.data;
+    }
+    if (statusCode === 200) {
+      toast.success('Successfully');
     }
     return response;
   },

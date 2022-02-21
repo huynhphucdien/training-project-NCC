@@ -12,11 +12,11 @@ const productModel = mongoose.Schema(
       trim: true,
     },
     productType: {
-      type: String,
+      type: Object,
       required: true,
     },
     productCategory: {
-      type: String,
+      type: Object,
       required: true,
     },
     productCost: {

@@ -8,7 +8,7 @@ import { Box, Button, Input, Paper, Stack } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { IMAGE_PLACEHOLDER } from '../../../../../constants';
+import { IMAGE_PLACEHOLDER } from '../../../../../components/Constants';
 
 const useStyles = makeStyles({
   stack: {

@@ -16,10 +16,9 @@ import { makeStyles } from '@mui/styles';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import * as yup from 'yup';
-import { CATEGORY_LABEL, TYPE_ID, TYPE_LABEL } from '../../../../components/Constants/common';
+import { CATEGORY_ID, CATEGORY_LABEL, TYPE_ID } from '../../../../components/Constants';
 import ImageAdded from '../AddProductForm/Forms/ImageAdded';
 import InputField from '../AddProductForm/Forms/InputField';
 import SelectField from '../AddProductForm/Forms/SelectField';
@@ -44,7 +43,7 @@ const useStyles = makeStyles({
 export default function UpdateForm(props) {
   const classes = useStyles();
   const { onSubmit, editProduct, categoryProduct, typeProduct } = props;
-  const [typeLabel, setTypeLabel] = useState(editProduct.productType);
+  const [typeId, setTypeId] = useState(editProduct.productType.id);
   const [image1, setImage1] = useState({});
   const [image2, setImage2] = useState({});
   const [image3, setImage3] = useState({});
@@ -65,11 +64,11 @@ export default function UpdateForm(props) {
     productType: yup
       .string()
       .required('Vui long chon')
-      .test('custom', 'Vui long chon', (value) => value !== TYPE_LABEL),
+      .test('custom', 'Vui long chon', (value) => value !== TYPE_ID),
     productCategory: yup
       .string()
       .required('Vui long chon')
-      .test('custom', 'Vui long chon', (value) => value !== CATEGORY_LABEL),
+      .test('custom', 'Vui long chon', (value) => value !== CATEGORY_ID),
     productCost: yup
       .number()
       .typeError('Vui long nhap so')
@@ -83,14 +82,13 @@ export default function UpdateForm(props) {
     defaultValues: {
       productCode: editProduct.productCode,
       productName: editProduct.productName,
-      productType: editProduct.productType,
-      productCategory: editProduct.productCategory,
+      productType: editProduct.productType.id,
+      productCategory: editProduct.productCategory.id,
       productCost: editProduct.productCost,
       productDescription: editProduct.productDescription,
     },
     resolver: yupResolver(schema),
   });
-
   // Prevent key down
   const handleChange = (e) => {
     // e.preventDefault();
@@ -109,18 +107,17 @@ export default function UpdateForm(props) {
   // Submit data
   const handleSubmitForm = (values) => {
     onSubmit(values, images);
-    toast.success('Successfully');
   };
   // set value cho product type
   const { setValue } = form;
 
-  const handleGetTypeLabel = (e) => {
-    setTypeLabel(e);
+  const handleGetTypeId = (e) => {
+    setTypeId(e);
     setValue('productType', e);
   };
   // Get value productCategory by productType
-  const newCategoryProduct = categoryProduct.filter((item) => item.typeLabel === typeLabel);
-  const newListCategory = [{ id: TYPE_ID, label: CATEGORY_LABEL }, ...newCategoryProduct];
+  const newCategoryProduct = categoryProduct.filter((item) => item.typeId === typeId);
+  const newListCategory = [{ id: CATEGORY_ID, label: CATEGORY_LABEL }, ...newCategoryProduct];
   // Get images
   const handleGetImage1 = (file1) => {
     setImage1(file1);
@@ -151,19 +148,18 @@ export default function UpdateForm(props) {
         <InputField name="productCode" label="Mã sản phẩm" form={form} disabled />
         <InputField name="productName" label="Tên sản phẩm" form={form} />
         <SelectField
-          autoFocus
           name="productType"
           label="Loại sản phẩm "
-          getTypeLabel={handleGetTypeLabel}
+          getTypeId={handleGetTypeId}
           form={form}
-          typeProductLabel={typeProduct}
+          typeProductUpdate={typeProduct}
         />
         <SelectField
           name="productCategory"
           label="Danh mục sản phẩm"
+          typeIdUpdate={typeId}
           form={form}
-          categoryProductLabel={newListCategory}
-          typeLabel={typeLabel}
+          productCategoryUpdate={newListCategory}
         />
         <InputField
           name="productCost"

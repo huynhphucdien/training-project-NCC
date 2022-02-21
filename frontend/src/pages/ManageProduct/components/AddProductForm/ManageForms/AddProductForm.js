@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable function-paren-newline */
 /* eslint-disable implicit-arrow-linebreak */
@@ -16,7 +17,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import 'react-toastify/dist/ReactToastify.css';
 import * as yup from 'yup';
-import { CATEGORY_LABEL, TYPE_ID, TYPE_LABEL } from '../../../../../components/Constants/common';
+import { CATEGORY_ID, CATEGORY_LABEL, TYPE_ID } from '../../../../../components/Constants';
 import AddMainImage from '../Forms/AddMainImage';
 import InputField from '../Forms/InputField';
 import SelectField from '../Forms/SelectField';
@@ -32,7 +33,7 @@ const useStyles = makeStyles({
 
 export default function AddProductForm(props) {
   const classes = useStyles();
-  const [typeLabel, setTypeLabel] = useState('--Loại Sản Phẩm--');
+  const [typeId, setTypeId] = useState(TYPE_ID);
   const [fileChange, setFileChange] = useState({});
   // const [message, setMessage] = useState(false);
 
@@ -42,6 +43,7 @@ export default function AddProductForm(props) {
   const rows = 5;
   const textline = 'multiline';
 
+  // value !== TYPE_ID,
   const schema = yup.object().shape({
     productName: yup
       .string()
@@ -50,11 +52,11 @@ export default function AddProductForm(props) {
     productType: yup
       .string()
       .required('Vui long chon')
-      .test('customType', 'Vui long chon', (value) => value !== TYPE_LABEL),
+      .test('customType', 'Vui long chon', (value) => value !== TYPE_ID),
     productCategory: yup
       .string()
       .required('Vui long chon')
-      .test('customType', 'Vui long chon', (value) => value !== CATEGORY_LABEL),
+      .test('customType', 'Vui long chon', (value) => value !== CATEGORY_ID),
     productCost: yup
       .number()
       .typeError('Vui long nhap so')
@@ -99,12 +101,12 @@ export default function AddProductForm(props) {
     onSubmit(values, fileChange);
   };
 
-  const handleGetTypeLabel = (e) => {
-    setTypeLabel(e);
+  const handleGetTypeId = (e) => {
+    setTypeId(e);
     setValue('productType', e);
   };
-  const newCategoryProduct = categoryProduct.filter((item) => item.typeLabel === typeLabel);
-  const newListCategory = [{ id: TYPE_ID, label: CATEGORY_LABEL }, ...newCategoryProduct];
+  const newCategoryProduct = categoryProduct.filter((item) => item.typeId === typeId);
+  const newListCategory = [{ id: CATEGORY_ID, label: CATEGORY_LABEL }, ...newCategoryProduct];
 
   return (
     <Box>
@@ -121,14 +123,14 @@ export default function AddProductForm(props) {
         <SelectField
           name="productType"
           label="Loại sản phẩm "
-          getTypeLabel={handleGetTypeLabel}
+          getTypeId={handleGetTypeId}
           form={form}
           productType={typeProduct}
         />
         <SelectField
           name="productCategory"
           label="Danh mục sản phẩm"
-          typeLabel={typeLabel}
+          typeId={typeId}
           form={form}
           productCategory={newListCategory}
         />

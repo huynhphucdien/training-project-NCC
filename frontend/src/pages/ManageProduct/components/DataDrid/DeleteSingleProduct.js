@@ -19,7 +19,7 @@ const useStyles = makeStyles({
 
 export default function DeleteSingleProduct(props) {
   const classes = useStyles();
-  const { productData, params, deleteSingleProduct } = props;
+  const { productData, params, pagination, deleteSingleProduct } = props;
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (e) => {
@@ -28,7 +28,8 @@ export default function DeleteSingleProduct(props) {
 
   const handleDelete = () => {
     const rowId = params.row.id;
-    const tableId = productData.filter((value, index) => index + 1 === rowId);
+    const tableId = productData.filter((value, index) => pagination + index + 1 === rowId);
+    console.log('delete');
     deleteSingleProduct(tableId.map((value) => value.id));
     setAnchorEl(null);
   };

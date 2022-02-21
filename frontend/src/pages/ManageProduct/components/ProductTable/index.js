@@ -1,18 +1,26 @@
+/* eslint-disable vars-on-top */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-var */
+/* eslint-disable prefer-const */
+/* eslint-disable function-paren-newline */
+/* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable object-curly-newline */
 /* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable no-console */
 /* eslint-disable react/prop-types */
 // /* eslint-disable object-curly-newline */
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import { useHistory } from 'react-router-dom';
+import { serialize } from 'object-to-formdata';
 import DeleteSingleProduct from '../DataDrid/DeleteSingleProduct';
 import EditProduct from '../DataDrid/EditProduct';
 import PaginationTable from '../DataDrid/PaginationTable';
+import ProductTypeTable from '../DataDrid/ProductTypeTable';
 
 export default function ProductTable(props) {
   const { productData, deleteSingleProduct, count, page, limit, onChange } = props;
+
   const columns = [
     {
       field: 'id',
@@ -45,9 +53,9 @@ export default function ProductTable(props) {
     {
       field: 'productCategory',
       headerName: 'Danh mục Sản Phẩm',
-      flex: 1,
       disableColumnMenu: true,
       sortable: false,
+      flex: 1.5,
     },
     {
       field: 'productCost',
@@ -72,10 +80,15 @@ export default function ProductTable(props) {
           }}
         >
           <Box>
-            <EditProduct paramEdit={params} productData={productData} />
+            <EditProduct
+              paramEdit={params}
+              pagination={limit * (page - 1)}
+              productData={productData}
+            />
           </Box>
           <DeleteSingleProduct
             productData={productData}
+            pagination={limit * (page - 1)}
             params={params}
             deleteSingleProduct={deleteSingleProduct}
           />
@@ -86,6 +99,7 @@ export default function ProductTable(props) {
       disableColumnMenu: true,
     },
   ];
+
   return (
     <div style={{ height: 400, width: '100%' }}>
       <DataGrid
@@ -93,8 +107,8 @@ export default function ProductTable(props) {
           id: limit * (page - 1) + index + 1,
           productName: value.productName,
           productCode: value.productCode,
-          productType: value.productType,
-          productCategory: value.productCategory,
+          productType: value.productType.label,
+          productCategory: value.productCategory.label,
           productCost: value.productCost,
         }))}
         columns={columns}
@@ -106,7 +120,7 @@ export default function ProductTable(props) {
         }}
         // pagination
         pageSize={6}
-        rowsPerPageOptions={[6, 12]}
+        rowsPerPageOptions={[6]}
         disableSelectionOnClick
       />
     </div>

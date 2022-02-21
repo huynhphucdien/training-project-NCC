@@ -1,10 +1,10 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/prop-types */
 /* eslint-disable */
-import { Box, TextField } from '@mui/material';
+import { Box, MenuItem, TextField } from '@mui/material';
 import React from 'react';
 import { Controller } from 'react-hook-form';
-import { TYPE_LABEL } from '../../../../../components/Constants/common';
+import { TYPE_ID } from '../../../../../components/Constants/common';
 
 export default function SelectField(props) {
   const {
@@ -13,11 +13,12 @@ export default function SelectField(props) {
     label,
     productType,
     productCategory,
-    typeProductLabel,
-    categoryProductLabel,
-    getTypeLabel,
-    typeLabel,
+    typeProductUpdate,
+    productCategoryUpdate,
+    getTypeId,
+    typeId,
   } = props;
+
   // console.log(productCategoryTable);
   // Handle error
   const { errors } = form;
@@ -25,7 +26,8 @@ export default function SelectField(props) {
 
   const handleChange = (e) => {
     const value = e.target.value;
-    if (productType || typeProductLabel) getTypeLabel(value);
+    if (productType || typeProductUpdate) getTypeId(value);
+    console.log('value', value);
   };
 
   return (
@@ -40,7 +42,7 @@ export default function SelectField(props) {
         as={TextField}
         label={label}
         fullWidth
-        disabled={typeLabel && typeLabel === TYPE_LABEL}
+        disabled={typeId === TYPE_ID}
         error={!!hasError}
         select
         onInput={handleChange}
@@ -48,30 +50,32 @@ export default function SelectField(props) {
           native: true,
         }}
         helperText={errors[name]?.message}
+        // onBlur={handleBlur}
       >
+        {/* //-------Add Product--------- */}
         {productType &&
           productType.map((option) => (
-            <option key={option.id} value={option.label}>
+            <option key={option.id} value={option.id}>
               {option.label}
             </option>
           ))}
         {productCategory &&
           productCategory.map((option) => (
-            <option key={option.id} value={option.label}>
+            <option key={option.id} value={option.id}>
               {option.label}
             </option>
           ))}
 
         {/* //-------Update--------- */}
-        {typeProductLabel &&
-          typeProductLabel.map((option) => (
-            <option key={option.id} value={option.label}>
+        {typeProductUpdate &&
+          typeProductUpdate.map((option) => (
+            <option key={option.id} value={option.id}>
               {option.label}
             </option>
           ))}
-        {categoryProductLabel &&
-          categoryProductLabel.map((option) => (
-            <option key={option.id} value={option.label}>
+        {productCategoryUpdate &&
+          productCategoryUpdate.map((option) => (
+            <option key={option.id} value={option.id}>
               {option.label}
             </option>
           ))}

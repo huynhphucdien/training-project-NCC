@@ -2,7 +2,7 @@
 import { Box, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
-import formatCost from '../../../utils/formatNumber';
+import formatCost from '../../../../utils/formatNumber';
 
 const useStyles = makeStyles({
   producDetail: {
@@ -31,44 +31,26 @@ export default function DetailProductInfo({ data }) {
       </Box>
       <Box className={classes.borderBottom}>
         <Typography component="h5">
-          <Typography
-            component="span"
-            sx={{ pr: 1 }}
-            className={classes.productNameTitle}
-          >
+          <Typography component="span" sx={{ pr: 1 }} className={classes.productNameTitle}>
             Mã sản phẩm:
           </Typography>
           <Typography component="span">{data.productCode}</Typography>
         </Typography>
         <Typography component="h5">
-          <Typography
-            component="span"
-            sx={{ pr: 1 }}
-            className={classes.productNameTitle}
-          >
+          <Typography component="span" sx={{ pr: 1 }} className={classes.productNameTitle}>
             Loại sản phẩm:
           </Typography>
-          <Typography component="span">{data.productCategory}</Typography>
+          <Typography component="span">{data.productCategory?.label}</Typography>
         </Typography>
         <Typography component="h5">
-          <Typography
-            component="span"
-            sx={{ pr: 1 }}
-            className={classes.productNameTitle}
-          >
+          <Typography component="span" sx={{ pr: 1 }} className={classes.productNameTitle}>
             Giá:
           </Typography>
-          <Typography component="span">
-            {formatCost(data.productCost)}
-          </Typography>
+          <Typography component="span">{formatCost(data.productCost)}</Typography>
         </Typography>
       </Box>
       <Typography component="h5">
-        <Typography
-          component="span"
-          sx={{ pr: 1 }}
-          className={classes.productNameTitle}
-        >
+        <Typography component="span" sx={{ pr: 1 }} className={classes.productNameTitle}>
           Mô tả:
         </Typography>
         <Typography component="span">{data.productDescription}</Typography>

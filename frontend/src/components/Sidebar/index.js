@@ -15,10 +15,20 @@ const useStyles = makeStyles((theme) => ({
   button: {
     width: '100%',
     margin: '8px auto !important',
+    padding: '0 !important',
     flex: 1,
+    '&:hover': {
+      backgroundColor: '#1976d2 !important',
+      color: '#fff !important',
+      // padding: '10px 5px !important',
+    },
   },
   link: {
     textDecoration: 'none',
+    padding: '10px 5px',
+    '&:active': {
+      color: '#fff !important',
+    },
     // color: '#fff',
   },
 }));
@@ -39,37 +49,3 @@ export default function SideBar() {
     </Box>
   );
 }
-
-// /* eslint-disable react/prop-types */
-// import { Box, Menu, MenuItem } from '@mui/material';
-// import React, { useState } from 'react';
-// import { Link } from 'react-router-dom';
-
-// function SideBar() {
-//   const [anchorEl, setAnchorEl] = useState(null);
-//   const handleClose = () => {
-//     setAnchorEl(null);
-//   };
-//   return (
-//     <Box>
-//       <Menu
-//         id="basic-menu"
-//         anchorEl={anchorEl}
-//         open={Boolean(anchorEl)}
-//         onClose={handleClose}
-//         MenuListProps={{
-//           'aria-labelledby': 'basic-button',
-//         }}
-//       >
-//         <MenuItem onClick={handleClose}>
-//           <Link to="/danh-sach-san-pham">Danh sách sản phẩm</Link>
-//         </MenuItem>
-//         <MenuItem onClick={handleClose}>
-//           <Link to="/quan-ly-san-pham">Quản lý sản phẩm</Link>
-//         </MenuItem>
-//       </Menu>
-//     </Box>
-//   );
-// }
-
-// export default SideBar;

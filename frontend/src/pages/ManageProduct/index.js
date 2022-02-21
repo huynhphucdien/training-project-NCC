@@ -36,6 +36,7 @@ export default function ContainManageProduct() {
   useEffect(() => {
     getApi();
   }, []);
+
   //   Get path
   const match = useRouteMatch();
 

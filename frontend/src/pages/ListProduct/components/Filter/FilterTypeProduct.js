@@ -1,18 +1,64 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-console */
+/* eslint-disable operator-linebreak */
+/* eslint-disable no-unused-vars */
 /* eslint-disable object-curly-newline */
-import { Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import React from 'react';
+import { Box, TextField } from '@mui/material';
+import MenuItem from '@mui/material/MenuItem';
+import React, { useEffect, useState } from 'react';
+import typeProductApi from '../../../../api/typeProduct';
+import { TYPE_ID, TYPE_LABEL } from '../../../../components/Constants/common';
+import useLoading from '../../../../hooks/useLoading';
 
-export default function FilterTypeProduct() {
+export default function FilterTypeProduct({ onChange, queryParams }) {
+  const [showLoading, hideLoading] = useLoading();
+  const [typeProduct, setTypeProduct] = useState([]);
+
+  // Call Api
+
+  const getApi = async () => {
+    try {
+      // setLoading(true);
+      showLoading();
+      const typeData = await typeProductApi.getAll();
+      setTypeProduct(typeData);
+      // setLoading(false);
+      hideLoading();
+    } catch (e) {
+      // setLoading(false);
+      showLoading();
+    }
+  };
+  useEffect(() => {
+    getApi();
+  }, []);
+
+  const handleChange = (e) => {
+    const typeId = e.target.value;
+    onChange(typeId);
+  };
+
+  // console.log(typeProduct);
   return (
-    <Box>
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Age</InputLabel>
-        <Select label="Loại sản phẩm">
-          <MenuItem value={1}>1</MenuItem>
-          <MenuItem value={2}>2</MenuItem>
-          <MenuItem value={3}>3</MenuItem>
-        </Select>
-      </FormControl>
+    <Box
+      sx={{
+        '& .MuiTextField-root': { m: 1, width: '20ch' },
+      }}
+    >
+      <TextField
+        id="outlined-select-currency"
+        select
+        label="Loại Sản Phẩm"
+        defaultValue={TYPE_ID}
+        onChange={handleChange}
+      >
+        {typeProduct &&
+          typeProduct.map((option) => (
+            <MenuItem key={option.id} value={option.id}>
+              {option.label}
+            </MenuItem>
+          ))}
+      </TextField>
     </Box>
   );
 }

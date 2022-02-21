@@ -1,1 +1,2 @@
-export * from './urlImage';
+export * from './common';
+export * from './imagePlaceholder';

@@ -1,4 +1,5 @@
 const httpStatus = require('http-status');
+const TYPE_LABEL = require('../constants/common');
 const { ProductModel } = require('../models');
 const ApiError = require('../utils/ApiError');
 
@@ -19,19 +20,42 @@ const createProduct = async (productBody) => {
 const getAllProductService = async (query) => {
   const page = query.page || 1;
   const limit = query.limit || 12;
-  const total = await ProductModel.countDocuments({});
+  const productType = query.productType || null;
+  const productCategory = query.productCategory || null;
+  const search = query.search || null;
+  // const total = await ProductModel.countDocuments({});
 
-  const product = await ProductModel.find()
-    .sort({ createdAt: 'descending' })
-    .skip(limit * (page - 1)) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
-    .limit(limit);
-  const products = { page, limit, total, product };
-  console.log('product', product);
-  console.log('total', total);
-  console.log('page', page);
-  console.log('limit', limit);
   console.log('query', query);
-  return products;
+  console.log('productType', query['productType']);
+  console.log('search', search);
+
+  let productQuery = ProductModel.find({});
+  if (productType) {
+    productQuery = productQuery.find({ 'productType.id': productType });
+  }
+  if (productCategory) {
+    productQuery = productQuery.find({ 'productCategory.id': productCategory });
+  }
+  if (search) {
+    productQuery = productQuery.find({
+      $or: [
+        { productName: { $regex: search, $options: '$i' } },
+        { productCode: { $regex: search, $options: '$i' } },
+      ],
+    });
+  }
+
+  // Count Document
+  const total = await ProductModel.countDocuments(productQuery);
+
+  // Pagination
+  // productQuery = productQuery
+
+  const product = await ProductModel.find(productQuery)
+    .sort({ createdAt: 'descending' })
+    .skip(limit * (page - 1))
+    .limit(limit);
+  return { total, product, page, limit };
 };
 
 /**

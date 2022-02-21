@@ -7,7 +7,7 @@ import { Box, Button, Input, Paper, Stack } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { IMAGE_PLACEHOLDER } from '../../../../../constants';
+import { IMAGE_PLACEHOLDER, URL_IMAGE } from '../../../../../components/Constants';
 
 const useStyles = makeStyles({
   img: {
@@ -56,14 +56,12 @@ export default function UploadImage1({ image1, imageAdded1 }) {
   const [avarta1, setAvarta1] = useState(IMAGE_PLACEHOLDER);
   useEffect(() => {
     if (imageAdded1.image1.length > 0) {
-      setAvarta1(imageAdded1.image1);
+      setAvarta1(`${URL_IMAGE}${imageAdded1.image1}`);
     }
   }, []);
   const handleChange = (e) => {
     e.preventDefault();
     const file = e.target.files[0];
-    console.log('file', file);
-    console.log('file.type', file.type);
     // Validate file extension
     if (file.type !== 'image/png' && file.type !== 'image/jpeg' && file.type !== 'image/jpg') {
       toast.error('Vui long chon file: png, jpeg, jpg', {
