@@ -6,7 +6,6 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-// const BASE_URL = 'http://localhost:5000';
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -16,7 +15,6 @@ axiosInstance.interceptors.request.use(async (config) => {
   const token = localStorage.getItem('jwt_token');
   config.headers = {
     'Content-Type': 'application/json',
-    // 'Content-Type': 'multipart/form-data',
   };
   if (token) {
     config.headers['Authorization'] = `Bearer ${token}`;
@@ -26,13 +24,8 @@ axiosInstance.interceptors.request.use(async (config) => {
 
 axiosInstance.interceptors.response.use(
   (response) => {
-    // toast.success('Successfully');
-    const statusCode = response.status;
     if (response.data) {
       return response.data;
-    }
-    if (statusCode === 200) {
-      toast.success('Successfully');
     }
     return response;
   },
@@ -52,9 +45,6 @@ axiosInstance.interceptors.response.use(
       return;
     }
     if (statusCode === 500) {
-      console.log('error', error);
-      // show notification
-
       return;
     }
     toast.error('System has an error');

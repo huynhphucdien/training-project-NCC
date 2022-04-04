@@ -2,10 +2,10 @@
 /* eslint-disable no-console */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { Box, Paper } from '@mui/material';
+import { Box } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
-import { TYPE_ID, CATEGORY_ID } from '../../../../components/Constants/common';
+import { CATEGORY_ID, TYPE_ID } from '../../../../components/Constants/common';
 import FilterCategoryProduct from './FilterCategoryProduct';
 import FilterSearchProduct from './FilterSearchProduct';
 import FilterTypeProduct from './FilterTypeProduct';
@@ -42,26 +42,23 @@ export default function FilterProduct(props) {
     }
     onCategoryChange(categoryId);
   };
-  const handleSubmitSearch = (value) => {
-    console.log('mainValue', value);
-    if (value.length > 2) {
-      onSearchChange(value);
-      return;
-    }
-    if (value.length === 0) {
-      onSearchChange(null);
-    }
+  const handleSubmitSearch = (values) => {
+    onSearchChange(values);
   };
-
   return (
-    <Paper component="form" className={classes.filter}>
-      <FilterTypeProduct queryParams={queryParams} onChange={handleTypeChange} />
+    <Box component="form" className={classes.filter}>
+      <FilterTypeProduct
+        queryParams={queryParams}
+        productType={productType}
+        onChange={handleTypeChange}
+      />
       <FilterCategoryProduct
         queryParams={queryParams}
+        // typeValue={typeValue}
         productType={productType}
         onChange={handleCategoryChange}
       />
-      <FilterSearchProduct onChange={handleSubmitSearch} />
-    </Paper>
+      <FilterSearchProduct queryParams={queryParams} onChange={handleSubmitSearch} />
+    </Box>
   );
 }

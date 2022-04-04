@@ -15,9 +15,10 @@ import {
 } from '../../../../components/Constants/common';
 import useLoading from '../../../../hooks/useLoading';
 
-export default function FilterTypeProduct({ onChange, productType }) {
+export default function FilterTypeProduct({ onChange, typeValue, queryParams, productType }) {
   const [showLoading, hideLoading] = useLoading();
   const [categoryProduct, setCategoryProduct] = useState([]);
+  const [value, setValue] = useState('');
 
   // Call Api
 
@@ -40,16 +41,19 @@ export default function FilterTypeProduct({ onChange, productType }) {
 
   const handleChange = (e) => {
     const categoryId = e.target.value;
+    setValue(categoryId);
     if (categoryId === CATEGORY_ID) {
       onChange(null);
-      console.log('null Category');
       return;
     }
     onChange(categoryId);
   };
-
-  const newCategoryProduct = categoryProduct.filter((item) => item.typeId === productType);
+  // Create categorylist by type
+  const newTypeId = queryParams.productType ? queryParams.productType : productType;
+  const newCategoryProduct = categoryProduct.filter((item) => item.typeId === newTypeId);
   const newListCategory = [{ id: CATEGORY_ID, label: CATEGORY_LABEL }, ...newCategoryProduct];
+  // set value for field
+  const categoryValue = queryParams.productCategory ? queryParams.productCategory : CATEGORY_ID;
   return (
     <Box
       sx={{
@@ -60,8 +64,8 @@ export default function FilterTypeProduct({ onChange, productType }) {
         id="outlined-select-currency"
         select
         label="Danh Sách Sản Phẩm"
-        disabled={productType && productType === TYPE_ID}
-        defaultValue="620e582b00bcd7877ee2aa97"
+        disabled={newTypeId === TYPE_ID}
+        value={categoryValue}
         onChange={handleChange}
       >
         {newListCategory &&

@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable object-curly-newline */
 /* eslint-disable consistent-return */
 /* eslint-disable no-unused-vars */
@@ -67,16 +68,21 @@ const useStyles = makeStyles({
   },
 });
 
-export default function AddMainImage({ fileImg }) {
+export default function AddMainImage({ fileImg, message }) {
   const classes = useStyles();
   const [avarta, setAvarta] = useState(IMAGE_PLACEHOLDER);
-  const [message, setMessage] = useState('vui long chon anh');
+  // const [message, setMessage] = useState('vui long chon anh');
 
   const handleChange = (e) => {
     const file = e.target.files[0];
 
     // Validate file extension
-    if (file.type !== 'image/png' && file.type !== 'image/jpeg' && file.type !== 'image/jpg') {
+    if (
+      file &&
+      file?.type !== 'image/png' &&
+      file?.type !== 'image/jpeg' &&
+      file?.type !== 'image/jpg'
+    ) {
       toast.error('Vui long chon file: png, jpeg, jpg', {
         position: 'bottom-center',
         autoClose: 2000,
@@ -84,7 +90,7 @@ export default function AddMainImage({ fileImg }) {
       return;
     }
     //  Validate file size
-    if (file.size > 6e6) {
+    if (file && file?.size > 6e6) {
       toast.error('Vui long chon file nho hon 6MB', {
         position: 'bottom-center',
         autoClose: 2000,
@@ -95,13 +101,11 @@ export default function AddMainImage({ fileImg }) {
       const preview = URL.createObjectURL(file);
       setAvarta(preview);
       fileImg(file);
-      setMessage(false);
     }
   };
   const handleDeleteImage = (e) => {
     setAvarta(IMAGE_PLACEHOLDER);
     fileImg([]);
-    setMessage(true);
   };
   return (
     <Stack direction="column" className={classes.stack}>
@@ -138,7 +142,7 @@ export default function AddMainImage({ fileImg }) {
       </Box>
       {message && (
         <Box className={classes.message} component="p">
-          vui long chon anh
+          Vui lòng chọn ảnh
         </Box>
       )}
     </Stack>

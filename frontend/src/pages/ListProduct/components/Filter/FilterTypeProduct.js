@@ -10,7 +10,7 @@ import typeProductApi from '../../../../api/typeProduct';
 import { TYPE_ID, TYPE_LABEL } from '../../../../components/Constants/common';
 import useLoading from '../../../../hooks/useLoading';
 
-export default function FilterTypeProduct({ onChange, queryParams }) {
+export default function FilterTypeProduct({ onChange, queryParams, productType }) {
   const [showLoading, hideLoading] = useLoading();
   const [typeProduct, setTypeProduct] = useState([]);
 
@@ -25,9 +25,10 @@ export default function FilterTypeProduct({ onChange, queryParams }) {
       // setLoading(false);
       hideLoading();
     } catch (e) {
-      // setLoading(false);
-      showLoading();
+      console.log(e);
+      hideLoading();
     }
+    hideLoading();
   };
   useEffect(() => {
     getApi();
@@ -37,8 +38,7 @@ export default function FilterTypeProduct({ onChange, queryParams }) {
     const typeId = e.target.value;
     onChange(typeId);
   };
-
-  // console.log(typeProduct);
+  const typeValue = queryParams.productType ? queryParams.productType : TYPE_ID;
   return (
     <Box
       sx={{
@@ -49,7 +49,7 @@ export default function FilterTypeProduct({ onChange, queryParams }) {
         id="outlined-select-currency"
         select
         label="Loại Sản Phẩm"
-        defaultValue={TYPE_ID}
+        value={typeValue}
         onChange={handleChange}
       >
         {typeProduct &&

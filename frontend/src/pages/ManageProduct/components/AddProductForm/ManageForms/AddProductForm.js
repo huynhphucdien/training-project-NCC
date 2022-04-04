@@ -34,8 +34,8 @@ const useStyles = makeStyles({
 export default function AddProductForm(props) {
   const classes = useStyles();
   const [typeId, setTypeId] = useState(TYPE_ID);
-  const [fileChange, setFileChange] = useState({});
-  // const [message, setMessage] = useState(false);
+  const [fileChange, setFileChange] = useState([]);
+  const [message, setMessage] = useState(false);
 
   const { typeProduct, categoryProduct, onSubmit } = props;
 
@@ -47,38 +47,38 @@ export default function AddProductForm(props) {
   const schema = yup.object().shape({
     productName: yup
       .string()
-      .required('Vui long nhap ten san pham')
-      .max(50, 'Vui long nhap duoi 50 ky tu'),
+      .required('Vui lòng nhập tên sản phẩm')
+      .max(100, 'Vui lòng nhập dưới 100 ký tự'),
     productType: yup
       .string()
-      .required('Vui long chon')
-      .test('customType', 'Vui long chon', (value) => value !== TYPE_ID),
+      .required('Vui lòng chọn')
+      .test('customType', 'Vui lòng chọn', (value) => value !== TYPE_ID),
     productCategory: yup
       .string()
-      .required('Vui long chon')
-      .test('customType', 'Vui long chon', (value) => value !== CATEGORY_ID),
+      .required('Vui lòng chọn')
+      .test('customCategory', 'Vui lòng chọn', (value) => value !== CATEGORY_ID),
     productCost: yup
       .number()
-      .typeError('Vui long nhap so')
-      .min(1001, 'Gia san pham phai lon hon 1000')
-      .max(1000000000, 'Gia san pham nho hon 1000000000')
-      .required('vui long nhap gia san pham'),
+      .typeError('Vui lòng nhập số')
+      .min(1001, 'Giá sản phẩm phải lớn hơn 1000')
+      .max(1000000000, 'Giá sản phẩm phải nhỏ hơn 1000000000')
+      .required('Vui lòng nhập giá sản phẩm'),
+    productDescription: yup.string().max(500, 'Vui lòng nhập dưới 500 ký tự'),
   });
 
   const form = useForm({
     mode: 'all',
     defaultValues: {
       productName: '',
-      productType: '',
-      productCategory: '',
+      productType: TYPE_ID,
+      productCategory: CATEGORY_ID,
       productCost: '',
       productDescription: '',
     },
     resolver: yupResolver(schema),
   });
 
-  // Prevent key down
-
+  // Prevent key e, '-' down
   const handleChange = (e) => {
     const keys = e.keyCode;
     if (keys === 189 || keys === 69) {
@@ -89,22 +89,32 @@ export default function AddProductForm(props) {
     e.target.blur();
   };
 
-  // set value cho product type
+  // set value cho product type and productCategory
   const { setValue } = form;
 
   // Get file image
   const handleGetFile = (file) => {
     setFileChange(file);
+    setMessage(false);
   };
   // Submit form values
   const handleSubmitForm = (values) => {
-    onSubmit(values, fileChange);
+    if (values && fileChange?.name) {
+      onSubmit(values, fileChange);
+    }
   };
-
+  // show message
+  const handleClick = () => {
+    if (fileChange.length === 0) {
+      setMessage(true);
+    }
+  };
   const handleGetTypeId = (e) => {
     setTypeId(e);
     setValue('productType', e);
+    setValue('productCategory', CATEGORY_ID);
   };
+  // Get list Category by typeId
   const newCategoryProduct = categoryProduct.filter((item) => item.typeId === typeId);
   const newListCategory = [{ id: CATEGORY_ID, label: CATEGORY_LABEL }, ...newCategoryProduct];
 
@@ -149,15 +159,9 @@ export default function AddProductForm(props) {
           rows={rows}
           form={form}
         />
-        <AddMainImage fileImg={handleGetFile} />
+        <AddMainImage message={message} fileImg={handleGetFile} />
 
-        <Button
-          variant="contained"
-          fullWidth
-          type="submit"
-          sx={{ mt: 1 }}
-          // onClick={handleNotify}
-        >
+        <Button onClick={handleClick} variant="contained" fullWidth type="submit" sx={{ mt: 1 }}>
           Submit
         </Button>
       </form>

@@ -7,7 +7,8 @@ import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme) => ({
   header: {
-    backgroundColor: '#0E2C51 !important',
+    backgroundColor: '#58b885 !important',
+    paddingLeft: '24px',
   },
 }));
 export default function Header() {

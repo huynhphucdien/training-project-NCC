@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable no-console */
 /* eslint-disable react/prop-types */
 /* eslint-disable object-curly-newline */
@@ -60,11 +61,15 @@ export default function ImageAdded({ imageAdded, imageChange }) {
     }
   }, []);
   const handleChange = (e) => {
-    e.preventDefault();
     const file = e.target.files[0];
 
     // Validate file extension
-    if (file.type !== 'image/png' && file.type !== 'image/jpeg' && file.type !== 'image/jpg') {
+    if (
+      file &&
+      file?.type !== 'image/png' &&
+      file?.type !== 'image/jpeg' &&
+      file?.type !== 'image/jpg'
+    ) {
       toast.error('Vui long chon file: png, jpeg, jpg', {
         position: 'bottom-center',
         autoClose: 2000,
@@ -72,7 +77,7 @@ export default function ImageAdded({ imageAdded, imageChange }) {
       return;
     }
     //  Validate file size
-    if (file.size > 6e6) {
+    if (file && file?.size > 6e6) {
       toast.error('Vui long chon file nho hon 6MB', {
         position: 'bottom-center',
         autoClose: 2000,

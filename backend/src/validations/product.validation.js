@@ -3,11 +3,11 @@ const { objectId } = require('./custom.validation');
 
 const createProduct = {
   body: Joi.object().keys({
-    productName: Joi.string().max(50).required(),
+    productName: Joi.string().max(100).required(),
     productType: Joi.object().required(),
     productCategory: Joi.object().required(),
     productCost: Joi.number().min(1000).max(1000000000).required(),
-    productDescription: Joi.string().max(400).allow(null, ''),
+    productDescription: Joi.string().max(500).allow(null, ''),
   }),
   file: Joi.object().keys({
     mainImage: Joi.string().required(),
@@ -35,11 +35,11 @@ const updateDetail = {
     detailId: Joi.required().custom(objectId),
   }),
   body: Joi.object().keys({
-    productName: Joi.string().max(50).required(),
+    productName: Joi.string().max(100).required(),
     productType: Joi.object().required(),
     productCategory: Joi.object().required(),
     productCost: Joi.number().min(1000).required(),
-    productDescription: Joi.string().max(400).allow(null, ''),
+    productDescription: Joi.string().max(500).allow(null, ''),
 
     mainImage: Joi.string().allow(null, ''),
     image1: Joi.string().allow(null, ''),

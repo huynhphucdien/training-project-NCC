@@ -8,11 +8,6 @@ import { Box } from '@mui/material';
 import React from 'react';
 
 export default function ProductTypeTable({ typeProduct, productData }) {
-  // const newTypeProduct = productData.map((value) =>
-  //   typeProduct.find((item) => item.id === value.productType),
-  // );
-  //   const renderType = [...newTypeProduct];
-  // console.log('newTypeProduct', newTypeProduct);
   const newTypeProduct = productData.map((value) =>
     typeProduct.find((item) => item.id === value.productType),
   );
@@ -21,12 +16,6 @@ export default function ProductTypeTable({ typeProduct, productData }) {
       {newTypeProduct.map((item) => (
         <Box key={item.id}>{item.label}</Box>
       ))}
-
-      {/* {newTypeProduct &&
-        console.log(
-          'render',
-          newTypeProduct.map((item) => item.map((x) => x.label)),
-        )} */}
     </Box>
   );
 }

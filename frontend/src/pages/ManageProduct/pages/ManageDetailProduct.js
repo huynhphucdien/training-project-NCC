@@ -6,6 +6,7 @@
 import { default as Close } from '@mui/icons-material/Close';
 import { Box, Dialog, DialogContent, IconButton, Paper } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import queryString from 'query-string';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -49,7 +50,6 @@ export default function ManageDetailProduct(props) {
       // setLoading(true);
       showLoading();
       const data = await productApi.get(id);
-      console.log('data', data);
       if (data) {
         setEditProduct(data);
         setOpen(true);
@@ -71,8 +71,6 @@ export default function ManageDetailProduct(props) {
     const { mainImage, image1, image2, image3, image4 } = images;
     const newType = typeProduct.find((item) => item.id === values.productType);
     const newCategory = categoryProduct.find((item) => item.id === values.productCategory);
-    // console.log('image1', image1);
-    // console.log('editProduct');
 
     let formValues = new FormData();
     formValues.append('productName', values.productName);
@@ -91,11 +89,11 @@ export default function ManageDetailProduct(props) {
     // image1
     if (image1?.name) {
       formValues.append('image1', image1);
-    } else if (image1.length === 0 || editProduct.image1.length === 0) {
-      console.log('Delete successfull!');
-    } else {
+    }
+    if (editProduct?.image1) {
       formValues.append('image1', editProduct.image1);
     }
+
     // image2
     if (image2?.name) {
       formValues.append('image2', image2);
@@ -128,14 +126,35 @@ export default function ManageDetailProduct(props) {
     const update = await productApi.update(idEdited, formValues);
     hideLoading();
     if (update) {
-      toast.success('Successfully');
+      toast.success('Successfully!!!');
     }
-    history.push('/quan-ly-san-pham');
+    // history.push('/quan-ly-san-pham');
+    const dataApi = await productApi.getAll({ limit: 1000 });
+    if (dataApi) {
+      const { product } = dataApi;
+      const selectedProduct = product.find((value) => value.id === id);
+      const index = product.indexOf(selectedProduct) + 1;
+
+      const page = Math.ceil(index / 6);
+      const query = queryString.stringify({ page, limit: 6 });
+      history.push(`/quan-ly-san-pham/?${query}`);
+    }
   };
-  const handleClose = () => {
+  // Close dialog edit
+  const handleClose = async () => {
     setOpen(false);
-    history.push('/quan-ly-san-pham');
+    const dataApi = await productApi.getAll({ limit: 1000 });
+    if (dataApi) {
+      const { product } = dataApi;
+      const selectedProduct = product.find((value) => value.id === id);
+      const index = product.indexOf(selectedProduct) + 1;
+
+      const page = Math.ceil(index / 6);
+      const query = queryString.stringify({ page, limit: 6 });
+      history.push(`/quan-ly-san-pham/?${query}`);
+    }
   };
+
   return (
     <Box>
       <Paper>

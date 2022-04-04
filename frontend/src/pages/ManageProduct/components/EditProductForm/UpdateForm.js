@@ -15,7 +15,6 @@ import { green } from '@mui/material/colors';
 import { makeStyles } from '@mui/styles';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useHistory } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import * as yup from 'yup';
 import { CATEGORY_ID, CATEGORY_LABEL, TYPE_ID } from '../../../../components/Constants';
@@ -53,28 +52,27 @@ export default function UpdateForm(props) {
   // Textfield cho phần mô tả
   const rows = 5;
   const textline = 'multiline';
-  // Push to quann-ly-san-pham
-  const history = useHistory();
 
   const schema = yup.object().shape({
     productName: yup
       .string()
-      .required('Vui long nhap ten san pham')
-      .max(50, 'Vui long nhap duoi 50 ky tu'),
+      .required('Vui lòng nhập tên sản phẩm')
+      .max(100, 'Vui lòng nhập dưới 100 ký tự'),
     productType: yup
       .string()
-      .required('Vui long chon')
-      .test('custom', 'Vui long chon', (value) => value !== TYPE_ID),
+      .required('Vui lòng chọn')
+      .test('customType', 'Vui lòng chọn', (value) => value !== TYPE_ID),
     productCategory: yup
       .string()
-      .required('Vui long chon')
-      .test('custom', 'Vui long chon', (value) => value !== CATEGORY_ID),
+      .required('Vui lòng chọn')
+      .test('customCategory', 'Vui lòng chọn', (value) => value !== CATEGORY_ID),
     productCost: yup
       .number()
-      .typeError('Vui long nhap so')
-      .min(1001, 'Gia san pham phai lon hon 1000')
-      .max(1000000000, 'Gia san pham nho hon 1000000000')
-      .required('vui long nhap gia san pham'),
+      .typeError('Vui lòng nhập số')
+      .min(1001, 'Giá sản phẩm phải lớn hơn 1000')
+      .max(1000000000, 'Giá sản phẩm phải nhỏ hơn 1000000000')
+      .required('Vui lòng nhập giá sản phẩm'),
+    productDescription: yup.string().max(500, 'Vui lòng nhập dưới 500 ký tự'),
   });
 
   const form = useForm({
@@ -91,9 +89,7 @@ export default function UpdateForm(props) {
   });
   // Prevent key down
   const handleChange = (e) => {
-    // e.preventDefault();
     const keys = e.keyCode;
-    console.log('code', keys);
     if (keys === 189 || keys === 69) {
       e.preventDefault();
     }
@@ -114,6 +110,7 @@ export default function UpdateForm(props) {
   const handleGetTypeId = (e) => {
     setTypeId(e);
     setValue('productType', e);
+    setValue('productCategory', CATEGORY_ID);
   };
   // Get value productCategory by productType
   const newCategoryProduct = categoryProduct.filter((item) => item.typeId === typeId);
@@ -157,7 +154,7 @@ export default function UpdateForm(props) {
         <SelectField
           name="productCategory"
           label="Danh mục sản phẩm"
-          typeIdUpdate={typeId}
+          typeId={typeId}
           form={form}
           productCategoryUpdate={newListCategory}
         />
@@ -184,10 +181,6 @@ export default function UpdateForm(props) {
         <Stack direction="row" justifyContent="space-between" className={classes.stack}>
           <UploadImage3 image3={handleGetImage3} imageAdded3={editProduct} />
           <UploadImage4 image4={handleGetImage4} imageAdded4={editProduct} />
-        </Stack>
-        <Stack direction="row" justifyContent="space-between" sx={{ pr: 4, pl: 4 }}>
-          {/* <UploadImage3 />
-          <UploadImage4 /> */}
         </Stack>
         <Button variant="contained" fullWidth type="submit" sx={{ mt: 1 }}>
           UPDATE

@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable react/prop-types */
 /* eslint-disable object-curly-newline */
 /* eslint-disable jsx-a11y/label-has-associated-control */
@@ -58,10 +59,14 @@ export default function UploadImage1({ image3, imageAdded3 }) {
     }
   }, []);
   const handleChange = (e) => {
-    e.preventDefault();
     const file = e.target.files[0];
     // Validate file extension
-    if (file.type !== 'image/png' && file.type !== 'image/jpeg' && file.type !== 'image/jpg') {
+    if (
+      file &&
+      file?.type !== 'image/png' &&
+      file?.type !== 'image/jpeg' &&
+      file?.type !== 'image/jpg'
+    ) {
       toast.error('Vui long chon file: png, jpeg, jpg', {
         position: 'bottom-center',
         autoClose: 2000,
@@ -69,7 +74,7 @@ export default function UploadImage1({ image3, imageAdded3 }) {
       return;
     }
     //  Validate file size
-    if (file.size > 6e6) {
+    if (file && file?.size > 6e6) {
       toast.error('Vui long chon file nho hon 6MB', {
         position: 'bottom-center',
         autoClose: 2000,
@@ -80,14 +85,19 @@ export default function UploadImage1({ image3, imageAdded3 }) {
       const preview = URL.createObjectURL(file);
       setAvarta3(preview);
       image3(file);
-    } else {
-      setAvarta3(imageAdded3.image3);
-      image3(imageAdded3.image3);
+      return;
     }
+    if (imageAdded3.image3.length > 0) {
+      setAvarta3(`${URL_IMAGE}${imageAdded3.image3}`);
+      image3(imageAdded3.image3);
+      return;
+    }
+    setAvarta3(IMAGE_PLACEHOLDER);
   };
 
   const handleDeleteImage = () => {
     setAvarta3(IMAGE_PLACEHOLDER);
+    image3([]);
     image3([]);
   };
 

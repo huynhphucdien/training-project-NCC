@@ -1,3 +1,5 @@
+/* eslint-disable operator-linebreak */
+/* eslint-disable no-console */
 /* eslint-disable react/prop-types */
 /* eslint-disable object-curly-newline */
 /* eslint-disable jsx-a11y/label-has-associated-control */
@@ -57,10 +59,14 @@ export default function UploadImage1({ image4, imageAdded4 }) {
     }
   }, []);
   const handleChange = (e) => {
-    e.preventDefault();
     const file = e.target.files[0];
     // Validate file extension
-    if (file.type !== 'image/png' && file.type !== 'image/jpeg' && file.type !== 'image/jpg') {
+    if (
+      file &&
+      file?.type !== 'image/png' &&
+      file?.type !== 'image/jpeg' &&
+      file?.type !== 'image/jpg'
+    ) {
       toast.error('Vui long chon file: png, jpeg, jpg', {
         position: 'bottom-center',
         autoClose: 2000,
@@ -68,21 +74,27 @@ export default function UploadImage1({ image4, imageAdded4 }) {
       return;
     }
     //  Validate file size
-    if (file.size > 6e6) {
+    if (file && file?.size > 6e6) {
       toast.error('Vui long chon file nho hon 6MB', {
         position: 'bottom-center',
         autoClose: 2000,
       });
+
       return;
     }
     if (e.target.files.length > 0) {
       const preview = URL.createObjectURL(file);
       setAvarta4(preview);
       image4(file);
-    } else {
-      setAvarta4(imageAdded4.image4);
-      image4(imageAdded4.image4);
+      return;
     }
+    if (imageAdded4.image4.length > 0) {
+      setAvarta4(`${URL_IMAGE}${imageAdded4.image4}`);
+      image4(imageAdded4.image4);
+      return;
+    }
+    setAvarta4(IMAGE_PLACEHOLDER);
+    image4([]);
   };
 
   const handleDeleteImage = () => {

@@ -29,9 +29,6 @@ const createProduct = catchAsync(async (req, res) => {
   };
   const product = await productService.createProduct(productBody);
   res.status(httpStatus.CREATED).send(product);
-  console.log('mainImage', req.file);
-  console.log('paramsPost', req.params);
-  console.log('body', req.body);
 });
 
 const getAllProduct = catchAsync(async (req, res) => {
@@ -48,8 +45,6 @@ const getProduct = catchAsync(async (req, res) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
   res.send(product);
-  console.log('paramsGetSingle', req.params);
-  console.log('body', req.body);
 });
 
 const updateProduct = catchAsync(async (req, res) => {
@@ -93,9 +88,6 @@ const updateProduct = catchAsync(async (req, res) => {
     updateBody
   );
   res.send(product);
-  console.log('req.files', req.files);
-  console.log('body', req.body);
-  console.log('updateBody', updateBody);
 });
 
 const deleteProduct = catchAsync(async (req, res) => {

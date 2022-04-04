@@ -29,7 +29,6 @@ export default function DeleteSingleProduct(props) {
   const handleDelete = () => {
     const rowId = params.row.id;
     const tableId = productData.filter((value, index) => pagination + index + 1 === rowId);
-    console.log('delete');
     deleteSingleProduct(tableId.map((value) => value.id));
     setAnchorEl(null);
   };

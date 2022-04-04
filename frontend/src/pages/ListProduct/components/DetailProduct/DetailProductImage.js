@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable function-paren-newline */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/no-array-index-key */
@@ -10,10 +11,8 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { URL_IMAGE } from '../../../../components/Constants';
 import './image.css';
-// import 'react-alice-carousel/lib/alice-carousel.css';
 
 export default function DetailProductImage({ data }) {
-  console.log(data);
   const images = [data?.mainImage];
   if (data.image1?.length > 0) {
     images.push(data?.image1);
@@ -27,13 +26,13 @@ export default function DetailProductImage({ data }) {
   if (data.image4?.length > 0) {
     images.push(data?.image4);
   }
-  console.log('images', images);
   return (
-    <div>
-      <Carousel showArrows infiniteLoop>
-        {images.map((url, index) => (
-          <img key={index} src={`${URL_IMAGE}${url}`} alt="" />
-        ))}
+    <div className="main">
+      <Carousel showArrows infiniteLoop showThumbs>
+        {images &&
+          images.map((url, index) => (
+            <img key={index} src={`${URL_IMAGE}${url}`} alt="" width="100%" height="100%" />
+          ))}
       </Carousel>
     </div>
   );

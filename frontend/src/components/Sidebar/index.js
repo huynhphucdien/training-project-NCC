@@ -38,7 +38,7 @@ export default function SideBar() {
     <Box className={classes.main}>
       <Button variant="outlined" color="secondary" className={classes.button}>
         <NavLink to="/danh-sach-san-pham" className={classes.link}>
-          DANH SÁCH SẢN PHẨM
+          SẢN PHẨM
         </NavLink>
       </Button>
       <Button variant="outlined" color="secondary" className={classes.button}>

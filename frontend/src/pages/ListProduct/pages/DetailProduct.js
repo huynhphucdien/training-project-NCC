@@ -20,17 +20,15 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexFlow: 'column nowrap',
     justifyContent: 'space-between',
-  },
-  left: {
-    width: '50%',
-  },
-  right: {
-    flex: '1',
-    marginLeft: '8px !important',
-    height: '500px',
+    marginBottom: '30px',
   },
   paper: {
-    height: '100%',
+    height: '500px !important',
+  },
+  link: {
+    textDecoration: 'none',
+    fontWeight: '600',
+    color: '#1976d2',
   },
 }));
 export default function DetailProduct() {
@@ -40,13 +38,13 @@ export default function DetailProduct() {
   const [showLoading, hideLoading] = useLoading();
 
   const {
-    params: { detailId },
+    params: { id },
   } = useRouteMatch();
   const getData = async () => {
     try {
       // setLoading(true);
       showLoading();
-      const data = await productApi.get(detailId);
+      const data = await productApi.get(id);
       if (data) {
         setProductDetail(data);
       }
@@ -55,6 +53,7 @@ export default function DetailProduct() {
     } catch (e) {
       console.log(e);
       // setLoading(false);
+      hideLoading();
     }
     hideLoading();
   };
@@ -65,20 +64,22 @@ export default function DetailProduct() {
   return (
     <Stack className={classes.main}>
       <Box>
-        <Typography>
-          Sản Phẩm/
+        <Typography sx={{ pt: 2, pb: 1, pl: 1 }}>
+          <Link to="/danh-sach-san-pham" className={classes.link}>
+            Sản Phẩm
+          </Link>
           <Box component="span" ml={1}>
-            <Link to="/danh-sach-san-pham">Danh sách sản phẩm</Link>
+            {'>>'} Chi Tiết Sản Phẩm
           </Box>
         </Typography>
       </Box>
-      <Grid container spacing={1}>
-        <Grid item className={classes.left}>
+      <Grid container columnSpacing={2.5} spacing={1}>
+        <Grid item lg={6}>
           <Paper className={classes.paper}>
             <DetailProductImage data={ProductDetail} />
           </Paper>
         </Grid>
-        <Grid item className={classes.right}>
+        <Grid item lg={6}>
           <Paper elevation={0} className={classes.paper}>
             <DetailProductInfo data={ProductDetail} />
           </Paper>

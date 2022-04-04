@@ -60,10 +60,14 @@ export default function UploadImage1({ image1, imageAdded1 }) {
     }
   }, []);
   const handleChange = (e) => {
-    e.preventDefault();
     const file = e.target.files[0];
     // Validate file extension
-    if (file.type !== 'image/png' && file.type !== 'image/jpeg' && file.type !== 'image/jpg') {
+    if (
+      file &&
+      file?.type !== 'image/png' &&
+      file?.type !== 'image/jpeg' &&
+      file?.type !== 'image/jpg'
+    ) {
       toast.error('Vui long chon file: png, jpeg, jpg', {
         position: 'bottom-center',
         autoClose: 2000,
@@ -71,7 +75,7 @@ export default function UploadImage1({ image1, imageAdded1 }) {
       return;
     }
     //  Validate file size
-    if (file.size > 6e6) {
+    if (file && file?.size > 6e6) {
       toast.error('Vui long chon file nho hon 6MB', {
         position: 'bottom-center',
         autoClose: 2000,
@@ -82,7 +86,15 @@ export default function UploadImage1({ image1, imageAdded1 }) {
       const preview = URL.createObjectURL(file);
       setAvarta1(preview);
       image1(file);
+      return;
     }
+    if (imageAdded1.image1.length > 0) {
+      setAvarta1(`${URL_IMAGE}${imageAdded1.image1}`);
+      image1(imageAdded1.image1);
+      return;
+    }
+    setAvarta1(IMAGE_PLACEHOLDER);
+    image1([]);
   };
 
   const handleDeleteImage = () => {

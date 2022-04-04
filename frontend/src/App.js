@@ -5,13 +5,11 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Slide, ToastContainer } from 'react-toastify';
 import './App.css';
 import Header from './components/Header';
-// import SideBar from './components/Sidebar';
 import OverLayProvider from './components/OverLay/provider';
 import SideBar from './components/Sidebar';
 import ProductDetail from './pages/ListProduct/pages/DetailProduct';
 import ListProduct from './pages/ListProduct/pages/ListProduct';
 import ContainManageProduct from './pages/ManageProduct';
-// import ManageProduct from './pages/ManageProduct/pages/ManageProduct';
 
 const routes = [
   {
@@ -25,7 +23,7 @@ const routes = [
     component: ListProduct,
   },
   {
-    path: '/danh-sach-san-pham/:detailId',
+    path: '/danh-sach-san-pham/:id',
     exact: true,
     component: ProductDetail,
   },
@@ -40,9 +38,12 @@ const useStyles = makeStyles((theme) => ({
   left: {
     width: '18%',
     margin: '8px auto',
+    flexShrink: '0',
+    // backgroundColor: '#58B885',
   },
   right: {
-    flex: '1',
+    // backgroundColor: '#B9E09F',
+    width: '80%',
     margin: '0 16px',
   },
 }));

@@ -12,11 +12,9 @@
 // /* eslint-disable object-curly-newline */
 import { Box } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import { serialize } from 'object-to-formdata';
 import DeleteSingleProduct from '../DataDrid/DeleteSingleProduct';
 import EditProduct from '../DataDrid/EditProduct';
 import PaginationTable from '../DataDrid/PaginationTable';
-import ProductTypeTable from '../DataDrid/ProductTypeTable';
 
 export default function ProductTable(props) {
   const { productData, deleteSingleProduct, count, page, limit, onChange } = props;
@@ -116,11 +114,16 @@ export default function ProductTable(props) {
           Pagination: PaginationTable,
         }}
         componentsProps={{
-          pagination: { countTable: count, pageTable: page, onChangeTable: onChange },
+          pagination: {
+            countTable: count,
+            pageTable: page,
+            limitTable: limit,
+            onChangeTable: onChange,
+          },
         }}
         // pagination
-        pageSize={6}
-        rowsPerPageOptions={[6]}
+        pageSize={limit}
+        rowsPerPageOptions={[limit]}
         disableSelectionOnClick
       />
     </div>

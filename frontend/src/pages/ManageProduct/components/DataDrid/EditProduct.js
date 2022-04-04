@@ -11,9 +11,7 @@ export default function EditProduct({ paramEdit, pagination, productData }) {
   const handleClick = () => {
     const rowId = paramEdit.row.id;
     const tableId = productData.filter((value, index) => pagination + index + 1 === rowId);
-    console.log(tableId);
-    return history.push(`/quan-ly-san-pham/${tableId.map((value) => value.id)}`);
-    // history.push('/quan-ly-san-pham');
+    history.push(`/quan-ly-san-pham/${tableId.map((value) => value.id)}`);
   };
 
   return (

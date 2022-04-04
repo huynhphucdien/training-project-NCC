@@ -130,9 +130,17 @@ export default function ManageForm(props) {
     const addProduct = await productApi.create(formValues);
     hideLoading();
     if (addProduct) {
-      toast.success('SUCESSFULLY');
+      toast.success('Successfully!!!');
     }
-    await getProductApi();
+    const filters = {
+      ...queryParams,
+      page: 1,
+    };
+    history.push({
+      pathname: history.location.pathname,
+      search: queryString.stringify(filters),
+    });
+    // await getProductApi();
   };
   // Handle open and close form
   const handleClose = () => {
@@ -144,7 +152,10 @@ export default function ManageForm(props) {
   };
   // Delete product
   const handleDelete = async (id) => {
-    await productApi.remove(id);
+    const deleteProduct = await productApi.remove(id);
+    if (deleteProduct) {
+      toast.success('Successfully!!!');
+    }
     getProductApi();
   };
 

@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable no-console */
 /* eslint-disable react/prop-types */
 /* eslint-disable object-curly-newline */
@@ -61,10 +62,14 @@ export default function UploadImage1({ image2, imageAdded2 }) {
   }, []);
 
   const handleChange = (e) => {
-    e.preventDefault();
     const file = e.target.files[0];
     // Validate file extension
-    if (file.type !== 'image/png' && file.type !== 'image/jpeg' && file.type !== 'image/jpg') {
+    if (
+      file &&
+      file?.type !== 'image/png' &&
+      file?.type !== 'image/jpeg' &&
+      file?.type !== 'image/jpg'
+    ) {
       toast.error('Vui long chon file: png, jpeg, jpg', {
         position: 'bottom-center',
         autoClose: 2000,
@@ -72,7 +77,7 @@ export default function UploadImage1({ image2, imageAdded2 }) {
       return;
     }
     //  Validate file size
-    if (file.size > 6e6) {
+    if (file && file?.size > 6e6) {
       toast.error('Vui long chon file nho hon 6MB', {
         position: 'bottom-center',
         autoClose: 2000,
@@ -83,10 +88,15 @@ export default function UploadImage1({ image2, imageAdded2 }) {
       const preview = URL.createObjectURL(file);
       setAvarta2(preview);
       image2(file);
-    } else {
-      setAvarta2(imageAdded2.image2);
-      image2(imageAdded2.image2);
+      return;
     }
+    if (imageAdded2.image2.length > 0) {
+      setAvarta2(`${URL_IMAGE}${imageAdded2.image2}`);
+      image2(imageAdded2.image2);
+      return;
+    }
+    setAvarta2(IMAGE_PLACEHOLDER);
+    image2([]);
   };
 
   const handleDeleteImage = () => {

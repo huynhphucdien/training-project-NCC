@@ -8,12 +8,12 @@
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 /* eslint-disable space-in-parens */
-import { Grid, Pagination, Paper } from '@mui/material';
+import { Grid, Pagination, Paper, Stack, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { makeStyles } from '@mui/styles';
 import queryString from 'query-string';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import productApi from '../../../api/productApi';
 import useLoading from '../../../hooks/useLoading';
 import FilterProduct from '../components/Filter/FilterProduct';
@@ -24,18 +24,27 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexFlow: 'row nowrap',
     justifyContent: 'center',
-    marginTop: '20px',
-    paddingBottom: '20px',
+    margin: '20px auto 30px',
     width: '100%',
   },
   filter: {
     display: 'flex',
     justifyContent: 'flex-end',
-    margin: '0 16px 16px',
-    borderBottom: '1px solid #795548',
+    margin: '0 16px',
   },
   paper: {
     width: '100%',
+    margin: '10px 0 20px',
+    backgroundColor: 'rgb(244, 244, 244) !important',
+  },
+  mainFilter: {
+    flexDirection: 'row !important',
+    justifyContent: 'space-between',
+  },
+  link: {
+    textDecoration: 'none',
+    fontWeight: '600',
+    color: '#1976d2',
   },
 }));
 export default function ListProduct() {
@@ -59,8 +68,6 @@ export default function ListProduct() {
     limit: 12,
     total: 12,
   });
-
-  // console.log(queryParams);
 
   const getApi = async () => {
     try {
@@ -102,17 +109,17 @@ export default function ListProduct() {
       productType: typeId,
       page: 1,
     };
+    delete filters.productCategory;
 
     const newQueryParams = { ...queryParams };
     delete newQueryParams.productType;
     delete newQueryParams.productCategory;
 
-    const exactFilters = typeId ? filters : newQueryParams;
-    console.log(exactFilters);
+    const newFilters = typeId ? filters : newQueryParams;
 
     history.push({
       pathname: history.location.pathname,
-      search: queryString.stringify(exactFilters),
+      search: queryString.stringify(newFilters),
     });
   };
   // Filter by category
@@ -135,34 +142,48 @@ export default function ListProduct() {
       search: values,
       page: 1,
     };
+    const newQueryParams = { ...queryParams };
+    delete newQueryParams.search;
+    const newFilters = values.length > 2 ? filters : newQueryParams;
     history.push({
       pathname: history.location.pathname,
-      search: queryString.stringify(filters),
+      search: queryString.stringify(newFilters),
     });
   };
-
   return (
     <Box>
-      <Grid container spacing={1} sx={{ pt: 2 }} className={classes.paper}>
-        <Box className={classes.filter}>
-          <FilterProduct
-            queryParams={queryParams}
-            onTypeChange={handleTypeChange}
-            onCategoryChange={handleCategoryChange}
-            onSearchChange={handleSearchChange}
-          />
-        </Box>
+      <Paper className={classes.paper}>
+        <Stack className={classes.mainFilter}>
+          <Typography component="div" padding={1}>
+            <Link to="/danh-sach-san-pham" className={classes.link}>
+              Sản Phẩm
+            </Link>
+            <Box component="span" ml={1}>
+              {'>>'} Danh sách sản phẩm
+            </Box>
+          </Typography>
+          <Box className={classes.filter}>
+            <FilterProduct
+              queryParams={queryParams}
+              onTypeChange={handleTypeChange}
+              onCategoryChange={handleCategoryChange}
+              onSearchChange={handleSearchChange}
+            />
+          </Box>
+        </Stack>
+      </Paper>
+      <Grid container>
         <ProductList data={productList} />
-        <Box className={classes.pagination}>
-          <Pagination
-            color="primary"
-            count={Math.ceil(pagination.total / pagination.limit)}
-            page={pagination.page}
-            shape="rounded"
-            onChange={handlePageChange}
-          ></Pagination>
-        </Box>
       </Grid>
+      <Box className={classes.pagination}>
+        <Pagination
+          color="primary"
+          count={Math.ceil(pagination.total / pagination.limit)}
+          page={pagination.page}
+          shape="rounded"
+          onChange={handlePageChange}
+        ></Pagination>
+      </Box>
     </Box>
   );
 }

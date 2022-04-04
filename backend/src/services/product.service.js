@@ -1,5 +1,4 @@
 const httpStatus = require('http-status');
-const TYPE_LABEL = require('../constants/common');
 const { ProductModel } = require('../models');
 const ApiError = require('../utils/ApiError');
 
@@ -25,10 +24,6 @@ const getAllProductService = async (query) => {
   const search = query.search || null;
   // const total = await ProductModel.countDocuments({});
 
-  console.log('query', query);
-  console.log('productType', query['productType']);
-  console.log('search', search);
-
   let productQuery = ProductModel.find({});
   if (productType) {
     productQuery = productQuery.find({ 'productType.id': productType });
@@ -47,9 +42,6 @@ const getAllProductService = async (query) => {
 
   // Count Document
   const total = await ProductModel.countDocuments(productQuery);
-
-  // Pagination
-  // productQuery = productQuery
 
   const product = await ProductModel.find(productQuery)
     .sort({ createdAt: 'descending' })
